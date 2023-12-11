@@ -1,0 +1,17 @@
+h1{
+    text-align: center;
+}
+/*Centar el la clase container-login y darle ancho al Formulario con la clase Form */
+.container-login{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 25vh;
+}
+.form {
+    width: 500px;
+  }
+
+  .form-1 {
+    width: 1000px;
+  }

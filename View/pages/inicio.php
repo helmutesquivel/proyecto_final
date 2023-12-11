@@ -1,0 +1,1 @@
+<h1>Bienvenidos al Colegio A & E</h1>
