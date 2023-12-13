@@ -22,7 +22,7 @@ class TelefonoModel{
         }
     }
     public static function mostrarTelefono(){
-        $stmt = ConexionModel::conectar()->prepare("SELECT * FROM telefono");
+        $stmt = ConexionModel::conectar()->prepare("SELECT telefono.idTel, telefono.telefono, alumno.primerNombre, alumno.primerApellido, categoriatelefono.tipo FROM telefono INNER JOIN alumno ON telefono.fkAlumno = alumno.idAlu inner JOIN categoriatelefono ON telefono.fkCatTel = categoriatelefono.idCatel");
         $stmt->execute();
         return $stmt->fetchAll();
     }

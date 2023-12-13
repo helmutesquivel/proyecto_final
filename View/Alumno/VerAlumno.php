@@ -10,7 +10,7 @@ $listado = $alumno->mostrar();
 
 ?>
 <h1>Alumnos</h1>
-
+<a href='index.php?action=alumnoPdf'><button type="button" class="btn btn-warning">Descargar Pdf</button></a><a href='index.php?action=alumnoExcel'><button type="button" class="btn btn-success">Descargar Excel</button></a>
 <table class="table table-hove mt-3">
     <thead>
         <tr class="table-success">
@@ -34,7 +34,7 @@ $listado = $alumno->mostrar();
                 <td><?php echo $item['segundoNombre']; ?></td>
                 <td><?php echo $item['primerApellido']; ?></td>
                 <td><?php echo $item['segundoApellido']; ?></td>
-                <td><?php echo $item['fkdireccion']; ?></td>
+                <td><?php echo $item['Direccion']; ?></td>
                 <td><?php echo $item['carne']; ?></td>
                 <td><?php echo $item['grado']; ?></td>
                 <td><a href='index.php?action=alumnoEditar&idAlu=<?php echo $item['idAlu']; ?>'><button type="button" class="btn btn-success">Editar</button></a></td>

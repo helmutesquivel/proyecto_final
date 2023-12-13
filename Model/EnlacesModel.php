@@ -42,6 +42,11 @@ class EnlacesModel{
             "detalleEditar" => "View/Detalle/DetalleEditar.php",
             "detalleEliminar" => "View/Detalle/DetalleEliminar.php",
             "detalleVer" => "View/Detalle/DetalleVer.php",
+            "alumnoPdf" => "View/Alumno/AlumnoPdf.php",
+            "alumnoExcel" => "View/Alumno/AlumnoExcel.php",
+            "detallePdf" => "View/Detalle/DetallePdf.php",
+            "telefonoPdf" => "View/Telefono/TelefonoPdf.php",
+            "materiaPdf" => "View/Materia/MateriaPdf.php",
             "login" => "View/login.php",
             "logout" => "View/logout.php",
             default => "View/pages/error.php"

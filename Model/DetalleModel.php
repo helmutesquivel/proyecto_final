@@ -22,7 +22,7 @@ class DetalleModel{
         }
     }
     public static function mostrarDetalle(){
-        $stmt = ConexionModel::conectar()->prepare("SELECT * FROM detalleasignatura");
+        $stmt = ConexionModel::conectar()->prepare("SELECT id, alumno.primerNombre as Nombre, alumno.primerApellido as Apellido, materia.materia as Curso, detalleasignatura.fecha_asig as Asignado FROM detalleasignatura INNER JOIN alumno ON detalleasignatura.fkAlumno = alumno.idAlu inner JOIN materia ON detalleasignatura.fkmateria = materia.idMate");
         $stmt->execute();
         return $stmt->fetchAll();
     }

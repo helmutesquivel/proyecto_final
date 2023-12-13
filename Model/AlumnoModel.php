@@ -27,7 +27,7 @@ class AlumnoModel
     }
     public static function mostrarAlumno()
     {
-        $stmt = ConexionModel::conectar()->prepare("SELECT * FROM alumno");
+        $stmt = ConexionModel::conectar()->prepare("SELECT idAlu, primerNombre, segundoNombre, primerApellido, segundoApellido, direccion.direccion as Direccion, carne, grado FROM alumno INNER JOIN direccion ON alumno.fkdireccion = direccion.idDirec");
         $stmt->execute();
         return $stmt->fetchAll();
     }

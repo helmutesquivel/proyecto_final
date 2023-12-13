@@ -10,14 +10,15 @@ $listado = $detalle->mostrar();
 
 ?>
 <h1>Asigacion de cursos</h1>
-
+<a href='index.php?action=detallePdf'><button type="button" class="btn btn-success">Descargar Pdf</button></a>
 <table class="table table-hove mt-3">
     <thead>
         <tr class="table-success">
             <th scope="row">No</th>
+            <td>Nombre</td>
+            <td>Apellido</td>
+            <td>Curso</td>
             <td>Fecha de Asignacion</td>
-            <td>Alumno</td>
-            <td>Asignar curso</td>
             <td>Editar</td>
             <td>Eliminar</td>
         </tr>
@@ -26,9 +27,10 @@ $listado = $detalle->mostrar();
     <?php foreach ($listado as $row => $item) : ?>
             <tr class="table-success">
                 <td><?php echo $item['id']; ?></td>
-                <td><?php echo $item['fecha_asig']; ?></td>
-                <td><?php echo $item['fkAlumno']; ?></td>
-                <td><?php echo $item['fkmateria']; ?></td>
+                <td><?php echo $item['Nombre']; ?></td>
+                <td><?php echo $item['Apellido']; ?></td>
+                <td><?php echo $item['Curso']; ?></td>
+                <td><?php echo $item['Asignado']; ?></td>
                 <td><a href='index.php?action=detalleEditar&id=<?php echo $item['id']; ?>'><button type="button" class="btn btn-success">Editar</button></a></td>
                 <td><a href='index.php?action=detalleEliminar&id=<?php echo $item['id']; ?>'><button type="button" class="btn btn-success">Eliminar</button></a></td>    
             </tr>

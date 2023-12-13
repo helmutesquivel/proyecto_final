@@ -10,7 +10,7 @@ $listado = $materia->mostrar();
 
 ?>
 <h1>Cursos</h1>
-
+<a href='index.php?action=materiaPdf'><button type="button" class="btn btn-success">Descargar Pdf</button></a>
 <table class="table table-hove mt-3">
     <thead>
         <tr class="table-success">
