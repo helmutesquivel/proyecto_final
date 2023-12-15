@@ -12,8 +12,10 @@ class Column
 {
     /**
      * Table Column Index.
+     *
+     * @var string
      */
-    private string $columnIndex = '';
+    private $columnIndex = '';
 
     /**
      * Show Filter Button.
@@ -24,28 +26,38 @@ class Column
 
     /**
      * Total Row Label.
+     *
+     * @var string
      */
-    private ?string $totalsRowLabel = null;
+    private $totalsRowLabel;
 
     /**
      * Total Row Function.
+     *
+     * @var string
      */
-    private ?string $totalsRowFunction = null;
+    private $totalsRowFunction;
 
     /**
      * Total Row Formula.
+     *
+     * @var string
      */
-    private ?string $totalsRowFormula = null;
+    private $totalsRowFormula;
 
     /**
      * Column Formula.
+     *
+     * @var string
      */
-    private ?string $columnFormula = null;
+    private $columnFormula;
 
     /**
      * Table.
+     *
+     * @var null|Table
      */
-    private ?Table $table;
+    private $table;
 
     /**
      * Create a new Column.
@@ -213,7 +225,7 @@ class Column
 
     private static function updateStructuredReferencesInCells(Worksheet $worksheet, string $oldTitle, string $newTitle): void
     {
-        $pattern = '/\[(@?)' . preg_quote($oldTitle, '/') . '\]/mui';
+        $pattern = '/\[(@?)' . preg_quote($oldTitle) . '\]/mui';
 
         foreach ($worksheet->getCoordinates(false) as $coordinate) {
             $cell = $worksheet->getCell($coordinate);
@@ -229,7 +241,7 @@ class Column
 
     private static function updateStructuredReferencesInNamedFormulae(Spreadsheet $spreadsheet, string $oldTitle, string $newTitle): void
     {
-        $pattern = '/\[(@?)' . preg_quote($oldTitle, '/') . '\]/mui';
+        $pattern = '/\[(@?)' . preg_quote($oldTitle) . '\]/mui';
 
         foreach ($spreadsheet->getNamedFormulae() as $namedFormula) {
             $formula = $namedFormula->getValue();

@@ -31,8 +31,10 @@ class Xls extends BaseWriter
 {
     /**
      * PhpSpreadsheet object.
+     *
+     * @var Spreadsheet
      */
-    private Spreadsheet $spreadsheet;
+    private $spreadsheet;
 
     /**
      * Total number of shared strings in workbook.
@@ -64,8 +66,10 @@ class Xls extends BaseWriter
 
     /**
      * Formula parser.
+     *
+     * @var Parser
      */
-    private Parser $parser;
+    private $parser;
 
     /**
      * Identifier clusters for drawings. Used in MSODRAWINGGROUP record.
@@ -423,8 +427,6 @@ class Xls extends BaseWriter
         $bstoreContainer->addBSE($BSE);
     }
 
-    private static int $two = 2; // phpstan silliness
-
     private function processDrawing(BstoreContainer &$bstoreContainer, Drawing $drawing): void
     {
         $blipType = 0;
@@ -432,7 +434,7 @@ class Xls extends BaseWriter
         $filename = $drawing->getPath();
 
         $imageSize = getimagesize($filename);
-        $imageFormat = empty($imageSize) ? 0 : ($imageSize[self::$two] ?? 0);
+        $imageFormat = empty($imageSize) ? 0 : ($imageSize[2] ?? 0);
 
         switch ($imageFormat) {
             case 1: // GIF, not supported by BIFF8, we convert to PNG
@@ -567,8 +569,10 @@ class Xls extends BaseWriter
 
     /**
      * Build the OLE Part for DocumentSummary Information.
+     *
+     * @return string
      */
-    private function writeDocumentSummaryInformation(): string
+    private function writeDocumentSummaryInformation()
     {
         // offset: 0; size: 2; must be 0xFE 0xFF (UTF-16 LE byte order mark)
         $data = pack('v', 0xFFFE);
@@ -747,12 +751,11 @@ class Xls extends BaseWriter
                 $dataSection_Content .= $dataProp['data']['data'];
 
                 $dataSection_Content_Offset += 4 + 4 + strlen($dataProp['data']['data']);
-            /* Condition below can never be true
-            } elseif ($dataProp['type']['data'] == 0x40) { // Filetime (64-bit value representing the number of 100-nanosecond intervals since January 1, 1601)
-                $dataSection_Content .= $dataProp['data']['data'];
+            // Condition below can never be true
+            //} elseif ($dataProp['type']['data'] == 0x40) { // Filetime (64-bit value representing the number of 100-nanosecond intervals since January 1, 1601)
+            //    $dataSection_Content .= $dataProp['data']['data'];
 
-                $dataSection_Content_Offset += 4 + 8;
-            */
+            //    $dataSection_Content_Offset += 4 + 8;
             } else {
                 $dataSection_Content .= $dataProp['data']['data'];
 
@@ -806,8 +809,10 @@ class Xls extends BaseWriter
 
     /**
      * Build the OLE Part for Summary Information.
+     *
+     * @return string
      */
-    private function writeSummaryInformation(): string
+    private function writeSummaryInformation()
     {
         // offset: 0; size: 2; must be 0xFE 0xFF (UTF-16 LE byte order mark)
         $data = pack('v', 0xFFFE);
@@ -843,14 +848,14 @@ class Xls extends BaseWriter
         ++$dataSection_NumProps;
 
         $props = $this->spreadsheet->getProperties();
-        $this->writeSummaryProp($props->getTitle(), $dataSection_NumProps, $dataSection, 0x02, 0x1E);
-        $this->writeSummaryProp($props->getSubject(), $dataSection_NumProps, $dataSection, 0x03, 0x1E);
-        $this->writeSummaryProp($props->getCreator(), $dataSection_NumProps, $dataSection, 0x04, 0x1E);
-        $this->writeSummaryProp($props->getKeywords(), $dataSection_NumProps, $dataSection, 0x05, 0x1E);
-        $this->writeSummaryProp($props->getDescription(), $dataSection_NumProps, $dataSection, 0x06, 0x1E);
-        $this->writeSummaryProp($props->getLastModifiedBy(), $dataSection_NumProps, $dataSection, 0x08, 0x1E);
-        $this->writeSummaryPropOle($props->getCreated(), $dataSection_NumProps, $dataSection, 0x0C, 0x40);
-        $this->writeSummaryPropOle($props->getModified(), $dataSection_NumProps, $dataSection, 0x0D, 0x40);
+        $this->writeSummaryProp($props->getTitle(), $dataSection_NumProps, $dataSection, 0x02, 0x1e);
+        $this->writeSummaryProp($props->getSubject(), $dataSection_NumProps, $dataSection, 0x03, 0x1e);
+        $this->writeSummaryProp($props->getCreator(), $dataSection_NumProps, $dataSection, 0x04, 0x1e);
+        $this->writeSummaryProp($props->getKeywords(), $dataSection_NumProps, $dataSection, 0x05, 0x1e);
+        $this->writeSummaryProp($props->getDescription(), $dataSection_NumProps, $dataSection, 0x06, 0x1e);
+        $this->writeSummaryProp($props->getLastModifiedBy(), $dataSection_NumProps, $dataSection, 0x08, 0x1e);
+        $this->writeSummaryPropOle($props->getCreated(), $dataSection_NumProps, $dataSection, 0x0c, 0x40);
+        $this->writeSummaryPropOle($props->getModified(), $dataSection_NumProps, $dataSection, 0x0d, 0x40);
 
         //    Security
         $dataSection[] = [

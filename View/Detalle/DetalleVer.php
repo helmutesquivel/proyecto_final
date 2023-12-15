@@ -2,7 +2,7 @@
 
 use Controller\DetalleController;
 
-//if(!empty($_SESSION['id'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 
 $detalle = new DetalleController;
 
@@ -10,7 +10,7 @@ $listado = $detalle->mostrar();
 
 ?>
 <h1>Asigacion de cursos</h1>
-<a href='index.php?action=detallePdf'><button type="button" class="btn btn-success">Descargar Pdf</button></a>
+<a href='index.php?action=detallePdf'><button type="button" class="btn btn-warning mr-4">Descargar Pdf</button></a> <a href='index.php?action=detalleExcel'><button type="button" class="btn btn-success">Descargar Excel</button></a>
 <table class="table table-hove mt-3">
     <thead>
         <tr class="table-success">
@@ -37,4 +37,4 @@ $listado = $detalle->mostrar();
         <?php endforeach; ?>
     </tbody>
 </table>
-<?php //} ?>
+<?php } ?>

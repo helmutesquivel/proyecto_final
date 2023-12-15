@@ -47,7 +47,7 @@ class ColumnIterator implements NativeIterator
      * @param string $startColumn The column address at which to start iterating
      * @param string $endColumn Optionally, the column address at which to stop iterating
      */
-    public function __construct(Worksheet $worksheet, string $startColumn = 'A', $endColumn = null)
+    public function __construct(Worksheet $worksheet, $startColumn = 'A', $endColumn = null)
     {
         // Set subject
         $this->worksheet = $worksheet;
@@ -60,7 +60,8 @@ class ColumnIterator implements NativeIterator
      */
     public function __destruct()
     {
-        unset($this->worksheet);
+        // @phpstan-ignore-next-line
+        $this->worksheet = null;
     }
 
     /**
@@ -70,7 +71,7 @@ class ColumnIterator implements NativeIterator
      *
      * @return $this
      */
-    public function resetStart(string $startColumn = 'A'): static
+    public function resetStart(string $startColumn = 'A')
     {
         $startColumnIndex = Coordinate::columnIndexFromString($startColumn);
         if ($startColumnIndex > Coordinate::columnIndexFromString($this->worksheet->getHighestColumn())) {
@@ -95,7 +96,7 @@ class ColumnIterator implements NativeIterator
      *
      * @return $this
      */
-    public function resetEnd($endColumn = null): static
+    public function resetEnd($endColumn = null)
     {
         $endColumn = $endColumn ?: $this->worksheet->getHighestColumn();
         $this->endColumnIndex = Coordinate::columnIndexFromString($endColumn);
@@ -110,7 +111,7 @@ class ColumnIterator implements NativeIterator
      *
      * @return $this
      */
-    public function seek(string $column = 'A'): static
+    public function seek(string $column = 'A')
     {
         $column = Coordinate::columnIndexFromString($column);
         if (($column < $this->startColumnIndex) || ($column > $this->endColumnIndex)) {

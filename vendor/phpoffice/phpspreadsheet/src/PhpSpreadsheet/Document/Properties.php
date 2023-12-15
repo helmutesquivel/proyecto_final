@@ -25,58 +25,80 @@ class Properties
 
     /**
      * Creator.
+     *
+     * @var string
      */
-    private string $creator = 'Unknown Creator';
+    private $creator = 'Unknown Creator';
 
     /**
      * LastModifiedBy.
+     *
+     * @var string
      */
-    private string $lastModifiedBy;
+    private $lastModifiedBy;
 
     /**
      * Created.
+     *
+     * @var float|int
      */
-    private float|int $created;
+    private $created;
 
     /**
      * Modified.
+     *
+     * @var float|int
      */
-    private float|int $modified;
+    private $modified;
 
     /**
      * Title.
+     *
+     * @var string
      */
-    private string $title = 'Untitled Spreadsheet';
+    private $title = 'Untitled Spreadsheet';
 
     /**
      * Description.
+     *
+     * @var string
      */
-    private string $description = '';
+    private $description = '';
 
     /**
      * Subject.
+     *
+     * @var string
      */
-    private string $subject = '';
+    private $subject = '';
 
     /**
      * Keywords.
+     *
+     * @var string
      */
-    private string $keywords = '';
+    private $keywords = '';
 
     /**
      * Category.
+     *
+     * @var string
      */
-    private string $category = '';
+    private $category = '';
 
     /**
      * Manager.
+     *
+     * @var string
      */
-    private string $manager = '';
+    private $manager = '';
 
     /**
      * Company.
+     *
+     * @var string
      */
-    private string $company = '';
+    private $company = '';
 
     /**
      * Custom Properties.
@@ -84,10 +106,6 @@ class Properties
      * @var array{value: mixed, type: string}[]
      */
     private $customProperties = [];
-
-    private string $hyperlinkBase = '';
-
-    private string $viewport = '';
 
     /**
      * Create a new Document Properties instance.
@@ -393,7 +411,10 @@ class Properties
         return $this->customProperties[$propertyName]['type'] ?? null;
     }
 
-    private function identifyPropertyType(mixed $propertyValue): string
+    /**
+     * @param mixed $propertyValue
+     */
+    private function identifyPropertyType($propertyValue): string
     {
         if (is_float($propertyValue)) {
             return self::PROPERTY_TYPE_FLOAT;
@@ -411,8 +432,9 @@ class Properties
     /**
      * Set a Custom Property.
      *
+     * @param mixed $propertyValue
      * @param string $propertyType
-     *   'i' : Integer
+     *      'i'    : Integer
      *   'f' : Floating Point
      *   's' : String
      *   'd' : Date/Time
@@ -420,7 +442,7 @@ class Properties
      *
      * @return $this
      */
-    public function setCustomProperty(string $propertyName, mixed $propertyValue = '', $propertyType = null): self
+    public function setCustomProperty(string $propertyName, $propertyValue = '', $propertyType = null): self
     {
         if (($propertyType === null) || (!in_array($propertyType, self::VALID_PROPERTY_TYPE_LIST))) {
             $propertyType = $this->identifyPropertyType($propertyValue);
@@ -473,9 +495,11 @@ class Properties
     /**
      * Convert property to form desired by Excel.
      *
+     * @param mixed $propertyValue
+     *
      * @return mixed
      */
-    public static function convertProperty(mixed $propertyValue, string $propertyType)
+    public static function convertProperty($propertyValue, string $propertyType)
     {
         return self::SPECIAL_TYPES[$propertyType] ?? self::convertProperty2($propertyValue, $propertyType);
     }
@@ -483,9 +507,11 @@ class Properties
     /**
      * Convert property to form desired by Excel.
      *
+     * @param mixed $propertyValue
+     *
      * @return mixed
      */
-    private static function convertProperty2(mixed $propertyValue, string $type)
+    private static function convertProperty2($propertyValue, string $type)
     {
         $propertyType = self::convertPropertyType($type);
         switch ($propertyType) {
@@ -507,31 +533,5 @@ class Properties
     public static function convertPropertyType(string $propertyType): string
     {
         return self::PROPERTY_TYPE_ARRAY[$propertyType] ?? self::PROPERTY_TYPE_UNKNOWN;
-    }
-
-    public function getHyperlinkBase(): string
-    {
-        return $this->hyperlinkBase;
-    }
-
-    public function setHyperlinkBase(string $hyperlinkBase): self
-    {
-        $this->hyperlinkBase = $hyperlinkBase;
-
-        return $this;
-    }
-
-    public function getViewport(): string
-    {
-        return $this->viewport;
-    }
-
-    public const SUGGESTED_VIEWPORT = 'width=device-width, initial-scale=1';
-
-    public function setViewport(string $viewport): self
-    {
-        $this->viewport = $viewport;
-
-        return $this;
     }
 }

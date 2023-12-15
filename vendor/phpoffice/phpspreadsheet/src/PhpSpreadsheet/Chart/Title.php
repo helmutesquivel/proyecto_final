@@ -3,16 +3,9 @@
 namespace PhpOffice\PhpSpreadsheet\Chart;
 
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Style\Font;
 
 class Title
 {
-    public const TITLE_CELL_REFERENCE
-        = '/^(.*)!' // beginning of string, everything up to ! is match[1]
-        . '[$]([A-Z]{1,3})' // absolute column string match[2]
-        . '[$](\d{1,7})$/i'; // absolute row string match[3]
-
     /**
      * Title Caption.
      *
@@ -29,17 +22,16 @@ class Title
 
     /**
      * Title Layout.
+     *
+     * @var ?Layout
      */
-    private ?Layout $layout;
-
-    private string $cellReference = '';
-
-    private ?Font $font = null;
+    private $layout;
 
     /**
      * Create a new Title.
      *
      * @param array|RichText|string $caption
+     * @param ?Layout $layout
      * @param bool $overlay
      */
     public function __construct($caption = '', ?Layout $layout = null, $overlay = false)
@@ -59,14 +51,8 @@ class Title
         return $this->caption;
     }
 
-    public function getCaptionText(?Spreadsheet $spreadsheet = null): string
+    public function getCaptionText(): string
     {
-        if ($spreadsheet !== null) {
-            $caption = $this->getCalculatedTitle($spreadsheet);
-            if ($caption !== null) {
-                return $caption;
-            }
-        }
         $caption = $this->caption;
         if (is_string($caption)) {
             return $caption;
@@ -95,7 +81,7 @@ class Title
      *
      * @return $this
      */
-    public function setCaption($caption): static
+    public function setCaption($caption)
     {
         $this->caption = $caption;
 
@@ -117,50 +103,13 @@ class Title
      *
      * @param bool $overlay
      */
-    public function setOverlay($overlay): static
+    public function setOverlay($overlay): void
     {
         $this->overlay = $overlay;
-
-        return $this;
     }
 
     public function getLayout(): ?Layout
     {
         return $this->layout;
-    }
-
-    public function setCellReference(string $cellReference): self
-    {
-        $this->cellReference = $cellReference;
-
-        return $this;
-    }
-
-    public function getCellReference(): string
-    {
-        return $this->cellReference;
-    }
-
-    public function getCalculatedTitle(?Spreadsheet $spreadsheet): ?string
-    {
-        preg_match(self::TITLE_CELL_REFERENCE, $this->cellReference, $matches);
-        if (count($matches) === 0 || $spreadsheet === null) {
-            return null;
-        }
-        $sheetName = preg_replace("/^'(.*)'$/", '$1', $matches[1]) ?? '';
-
-        return $spreadsheet->getSheetByName($sheetName)?->getCell($matches[2] . $matches[3])?->getFormattedValue();
-    }
-
-    public function getFont(): ?Font
-    {
-        return $this->font;
-    }
-
-    public function setFont(?Font $font): self
-    {
-        $this->font = $font;
-
-        return $this;
     }
 }

@@ -43,19 +43,16 @@ class Legend
 
     /**
      * Legend Layout.
+     *
+     * @var ?Layout
      */
-    private ?Layout $layout;
-
-    private GridLines $borderLines;
-
-    private ChartColor $fillColor;
-
-    private ?AxisText $legendText = null;
+    private $layout;
 
     /**
      * Create a new Legend.
      *
      * @param string $position
+     * @param ?Layout $layout
      * @param bool $overlay
      */
     public function __construct($position = self::POSITION_RIGHT, ?Layout $layout = null, $overlay = false)
@@ -63,13 +60,6 @@ class Legend
         $this->setPosition($position);
         $this->layout = $layout;
         $this->setOverlay($overlay);
-        $this->borderLines = new GridLines();
-        $this->fillColor = new ChartColor();
-    }
-
-    public function getFillColor(): ChartColor
-    {
-        return $this->fillColor;
     }
 
     /**
@@ -86,8 +76,10 @@ class Legend
      * Get legend position using an excel string value.
      *
      * @param string $position see self::POSITION_*
+     *
+     * @return bool
      */
-    public function setPosition($position): bool
+    public function setPosition($position)
     {
         if (!in_array($position, self::POSITION_XLREF)) {
             return false;
@@ -100,9 +92,12 @@ class Legend
 
     /**
      * Get legend position as an Excel internal numeric value.
+     *
+     * @return false|int
      */
-    public function getPositionXL(): false|int
+    public function getPositionXL()
     {
+        // Scrutinizer thinks the following could return string. It is wrong.
         return array_search($this->position, self::POSITION_XLREF);
     }
 
@@ -110,8 +105,10 @@ class Legend
      * Set legend position using an Excel internal numeric value.
      *
      * @param int $positionXL see self::XL_LEGEND_POSITION_*
+     *
+     * @return bool
      */
-    public function setPositionXL($positionXL): bool
+    public function setPositionXL($positionXL)
     {
         if (!isset(self::POSITION_XLREF[$positionXL])) {
             return false;
@@ -150,29 +147,5 @@ class Legend
     public function getLayout()
     {
         return $this->layout;
-    }
-
-    public function getLegendText(): ?AxisText
-    {
-        return $this->legendText;
-    }
-
-    public function setLegendText(?AxisText $legendText): self
-    {
-        $this->legendText = $legendText;
-
-        return $this;
-    }
-
-    public function getBorderLines(): GridLines
-    {
-        return $this->borderLines;
-    }
-
-    public function setBorderLines(GridLines $borderLines): self
-    {
-        $this->borderLines = $borderLines;
-
-        return $this;
     }
 }

@@ -65,12 +65,12 @@ class Meta extends WriterPart
         //<meta:document-statistic meta:table-count="XXX" meta:cell-count="XXX" meta:object-count="XXX"/>
         $objWriter->startElement('meta:user-defined');
         $objWriter->writeAttribute('meta:name', 'Company');
-        $objWriter->writeRawData($spreadsheet->getProperties()->getCompany());
+        $objWriter->writeRaw($spreadsheet->getProperties()->getCompany());
         $objWriter->endElement();
 
         $objWriter->startElement('meta:user-defined');
         $objWriter->writeAttribute('meta:name', 'category');
-        $objWriter->writeRawData($spreadsheet->getProperties()->getCategory());
+        $objWriter->writeRaw($spreadsheet->getProperties()->getCategory());
         $objWriter->endElement();
 
         self::writeDocPropsCustom($objWriter, $spreadsheet);

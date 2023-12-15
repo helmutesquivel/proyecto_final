@@ -29,13 +29,17 @@ class Security
 
     /**
      * RevisionsPassword.
+     *
+     * @var string
      */
-    private string $revisionsPassword = '';
+    private $revisionsPassword = '';
 
     /**
      * WorkbookPassword.
+     *
+     * @var string
      */
-    private string $workbookPassword = '';
+    private $workbookPassword = '';
 
     /**
      * Create a new Document Security instance.
@@ -49,9 +53,9 @@ class Security
      */
     public function isSecurityEnabled(): bool
     {
-        return $this->lockRevision
-                || $this->lockStructure
-                || $this->lockWindows;
+        return  $this->lockRevision ||
+                $this->lockStructure ||
+                $this->lockWindows;
     }
 
     public function getLockRevision(): bool
@@ -104,11 +108,12 @@ class Security
     /**
      * Set RevisionsPassword.
      *
+     * @param string $password
      * @param bool $alreadyHashed If the password has already been hashed, set this to true
      *
      * @return $this
      */
-    public function setRevisionsPassword(?string $password, bool $alreadyHashed = false): static
+    public function setRevisionsPassword(?string $password, bool $alreadyHashed = false)
     {
         if ($password !== null) {
             if (!$alreadyHashed) {
@@ -128,11 +133,12 @@ class Security
     /**
      * Set WorkbookPassword.
      *
+     * @param string $password
      * @param bool $alreadyHashed If the password has already been hashed, set this to true
      *
      * @return $this
      */
-    public function setWorkbookPassword(?string $password, bool $alreadyHashed = false): static
+    public function setWorkbookPassword(?string $password, bool $alreadyHashed = false)
     {
         if ($password !== null) {
             if (!$alreadyHashed) {

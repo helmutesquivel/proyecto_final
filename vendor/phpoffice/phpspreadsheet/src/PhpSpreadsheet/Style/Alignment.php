@@ -181,8 +181,10 @@ class Alignment extends Supervisor
      * Build style array from subcomponents.
      *
      * @param array $array
+     *
+     * @return array
      */
-    public function getStyleArray($array): array
+    public function getStyleArray($array)
     {
         return ['alignment' => $array];
     }
@@ -205,7 +207,7 @@ class Alignment extends Supervisor
      *
      * @return $this
      */
-    public function applyFromArray(array $styleArray): static
+    public function applyFromArray(array $styleArray)
     {
         if ($this->isSupervisor) {
             $this->getActiveSheet()->getStyle($this->getSelectedCells())
@@ -258,7 +260,7 @@ class Alignment extends Supervisor
      *
      * @return $this
      */
-    public function setHorizontal(string $horizontalAlignment): static
+    public function setHorizontal(string $horizontalAlignment)
     {
         $horizontalAlignment = strtolower($horizontalAlignment);
         if ($horizontalAlignment === self::HORIZONTAL_CENTER_CONTINUOUS_LC) {
@@ -296,7 +298,7 @@ class Alignment extends Supervisor
      *
      * @return $this
      */
-    public function setVertical($verticalAlignment): static
+    public function setVertical($verticalAlignment)
     {
         $verticalAlignment = strtolower($verticalAlignment);
 
@@ -331,7 +333,7 @@ class Alignment extends Supervisor
      *
      * @return $this
      */
-    public function setTextRotation($angleInDegrees): static
+    public function setTextRotation($angleInDegrees)
     {
         // Excel2007 value 255 => PhpSpreadsheet value -165
         if ($angleInDegrees == self::TEXTROTATION_STACK_EXCEL) {
@@ -374,7 +376,7 @@ class Alignment extends Supervisor
      *
      * @return $this
      */
-    public function setWrapText($wrapped): static
+    public function setWrapText($wrapped)
     {
         if ($wrapped == '') {
             $wrapped = false;
@@ -410,7 +412,7 @@ class Alignment extends Supervisor
      *
      * @return $this
      */
-    public function setShrinkToFit($shrink): static
+    public function setShrinkToFit($shrink)
     {
         if ($shrink == '') {
             $shrink = false;
@@ -446,14 +448,14 @@ class Alignment extends Supervisor
      *
      * @return $this
      */
-    public function setIndent($indent): static
+    public function setIndent($indent)
     {
         if ($indent > 0) {
             if (
-                $this->getHorizontal() != self::HORIZONTAL_GENERAL
-                && $this->getHorizontal() != self::HORIZONTAL_LEFT
-                && $this->getHorizontal() != self::HORIZONTAL_RIGHT
-                && $this->getHorizontal() != self::HORIZONTAL_DISTRIBUTED
+                $this->getHorizontal() != self::HORIZONTAL_GENERAL &&
+                $this->getHorizontal() != self::HORIZONTAL_LEFT &&
+                $this->getHorizontal() != self::HORIZONTAL_RIGHT &&
+                $this->getHorizontal() != self::HORIZONTAL_DISTRIBUTED
             ) {
                 $indent = 0; // indent not supported
             }
@@ -489,7 +491,7 @@ class Alignment extends Supervisor
      *
      * @return $this
      */
-    public function setReadOrder($readOrder): static
+    public function setReadOrder($readOrder)
     {
         if ($readOrder < 0 || $readOrder > 2) {
             $readOrder = 0;
@@ -516,14 +518,14 @@ class Alignment extends Supervisor
         }
 
         return md5(
-            $this->horizontal
-            . $this->vertical
-            . $this->textRotation
-            . ($this->wrapText ? 't' : 'f')
-            . ($this->shrinkToFit ? 't' : 'f')
-            . $this->indent
-            . $this->readOrder
-            . __CLASS__
+            $this->horizontal .
+            $this->vertical .
+            $this->textRotation .
+            ($this->wrapText ? 't' : 'f') .
+            ($this->shrinkToFit ? 't' : 'f') .
+            $this->indent .
+            $this->readOrder .
+            __CLASS__
         );
     }
 

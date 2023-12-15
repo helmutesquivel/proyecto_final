@@ -4,14 +4,11 @@ namespace PhpOffice\PhpSpreadsheet;
 
 use JsonSerializable;
 use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
-use PhpOffice\PhpSpreadsheet\Document\Properties;
-use PhpOffice\PhpSpreadsheet\Document\Security;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
 use PhpOffice\PhpSpreadsheet\Shared\File;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Iterator;
-use PhpOffice\PhpSpreadsheet\Worksheet\Table;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as XlsxWriter;
 
@@ -33,18 +30,24 @@ class Spreadsheet implements JsonSerializable
 
     /**
      * Unique ID.
+     *
+     * @var string
      */
-    private string $uniqueID;
+    private $uniqueID;
 
     /**
      * Document properties.
+     *
+     * @var Document\Properties
      */
-    private Properties $properties;
+    private $properties;
 
     /**
      * Document security.
+     *
+     * @var Document\Security
      */
-    private Security $security;
+    private $security;
 
     /**
      * Collection of Worksheet objects.
@@ -62,8 +65,10 @@ class Spreadsheet implements JsonSerializable
 
     /**
      * Active sheet index.
+     *
+     * @var int
      */
-    private int $activeSheetIndex;
+    private $activeSheetIndex = 0;
 
     /**
      * Named ranges.
@@ -74,8 +79,10 @@ class Spreadsheet implements JsonSerializable
 
     /**
      * CellXf supervisor.
+     *
+     * @var Style
      */
-    private Style $cellXfSupervisor;
+    private $cellXfSupervisor;
 
     /**
      * CellXf collection.
@@ -196,13 +203,6 @@ class Spreadsheet implements JsonSerializable
      */
     private $tabRatio = 600;
 
-    private Theme $theme;
-
-    public function getTheme(): Theme
-    {
-        return $this->theme;
-    }
-
     /**
      * The workbook has macros ?
      *
@@ -259,7 +259,7 @@ class Spreadsheet implements JsonSerializable
      *
      * @return bool true|false
      */
-    public function hasMacrosCertificate(): bool
+    public function hasMacrosCertificate()
     {
         return $this->macrosCertificate !== null;
     }
@@ -368,12 +368,16 @@ class Spreadsheet implements JsonSerializable
 
     /**
      * return the extension of a filename. Internal use for a array_map callback (php<5.3 don't like lambda function).
+     *
+     * @param mixed $path
+     *
+     * @return string
      */
-    private function getExtensionOnly(mixed $path): string
+    private function getExtensionOnly($path)
     {
         $extension = pathinfo($path, PATHINFO_EXTENSION);
 
-        return substr($extension, 0);
+        return substr(/** @scrutinizer ignore-type */$extension, 0);
     }
 
     /**
@@ -399,8 +403,8 @@ class Spreadsheet implements JsonSerializable
                 break;
             case 'types':
                 if (
-                    is_array($this->ribbonBinObjects)
-                    && isset($this->ribbonBinObjects['data']) && is_array($this->ribbonBinObjects['data'])
+                    is_array($this->ribbonBinObjects) &&
+                    isset($this->ribbonBinObjects['data']) && is_array($this->ribbonBinObjects['data'])
                 ) {
                     $tmpTypes = array_keys($this->ribbonBinObjects['data']);
                     $ReturnData = array_unique(array_map([$this, 'getExtensionOnly'], $tmpTypes));
@@ -416,16 +420,20 @@ class Spreadsheet implements JsonSerializable
 
     /**
      * This workbook have a custom UI ?
+     *
+     * @return bool
      */
-    public function hasRibbon(): bool
+    public function hasRibbon()
     {
         return $this->ribbonXMLData !== null;
     }
 
     /**
      * This workbook have additionnal object for the ribbon ?
+     *
+     * @return bool
      */
-    public function hasRibbonBinObjects(): bool
+    public function hasRibbonBinObjects()
     {
         return $this->ribbonBinObjects !== null;
     }
@@ -434,8 +442,10 @@ class Spreadsheet implements JsonSerializable
      * Check if a sheet with a specified code name already exists.
      *
      * @param string $codeName Name of the worksheet to check
+     *
+     * @return bool
      */
-    public function sheetCodeNameExists($codeName): bool
+    public function sheetCodeNameExists($codeName)
     {
         return $this->getSheetByCodeName($codeName) !== null;
     }
@@ -466,7 +476,6 @@ class Spreadsheet implements JsonSerializable
     {
         $this->uniqueID = uniqid('', true);
         $this->calculationEngine = new Calculation($this);
-        $this->theme = new Theme();
 
         // Initialise worksheet collection and add one worksheet
         $this->workSheetCollection = [];
@@ -500,7 +509,6 @@ class Spreadsheet implements JsonSerializable
         $this->calculationEngine = null;
         $this->cellXfCollection = [];
         $this->cellStyleXfCollection = [];
-        $this->definedNames = [];
     }
 
     /**
@@ -576,8 +584,10 @@ class Spreadsheet implements JsonSerializable
      * Create sheet and add it to this workbook.
      *
      * @param null|int $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     *
+     * @return Worksheet
      */
-    public function createSheet($sheetIndex = null): Worksheet
+    public function createSheet($sheetIndex = null)
     {
         $newSheet = new Worksheet($this);
         $this->addSheet($newSheet, $sheetIndex);
@@ -589,8 +599,10 @@ class Spreadsheet implements JsonSerializable
      * Check if a sheet with a specified name already exists.
      *
      * @param string $worksheetName Name of the worksheet to check
+     *
+     * @return bool
      */
-    public function sheetNameExists($worksheetName): bool
+    public function sheetNameExists($worksheetName)
     {
         return $this->getSheetByName($worksheetName) !== null;
     }
@@ -600,8 +612,10 @@ class Spreadsheet implements JsonSerializable
      *
      * @param Worksheet $worksheet The worksheet to add
      * @param null|int $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     *
+     * @return Worksheet
      */
-    public function addSheet(Worksheet $worksheet, $sheetIndex = null): Worksheet
+    public function addSheet(Worksheet $worksheet, $sheetIndex = null)
     {
         if ($this->sheetNameExists($worksheet->getTitle())) {
             throw new Exception(
@@ -653,8 +667,8 @@ class Spreadsheet implements JsonSerializable
 
         // Adjust active sheet index if necessary
         if (
-            ($this->activeSheetIndex >= $sheetIndex)
-            && ($this->activeSheetIndex > 0 || $numSheets <= 1)
+            ($this->activeSheetIndex >= $sheetIndex) &&
+            ($this->activeSheetIndex > 0 || $numSheets <= 1)
         ) {
             --$this->activeSheetIndex;
         }
@@ -701,7 +715,7 @@ class Spreadsheet implements JsonSerializable
     {
         $worksheetCount = count($this->workSheetCollection);
         for ($i = 0; $i < $worksheetCount; ++$i) {
-            if (strcasecmp($this->workSheetCollection[$i]->getTitle(), trim($worksheetName, "'")) === 0) {
+            if ($this->workSheetCollection[$i]->getTitle() === trim($worksheetName, "'")) {
                 return $this->workSheetCollection[$i];
             }
         }
@@ -746,7 +760,7 @@ class Spreadsheet implements JsonSerializable
      *
      * @return int New sheet index
      */
-    public function setIndexByName(string $worksheetName, $newIndexPosition)
+    public function setIndexByName($worksheetName, $newIndexPosition)
     {
         $oldIndex = $this->getIndex($this->getSheetByNameOrThrow($worksheetName));
         $worksheet = array_splice(
@@ -766,8 +780,10 @@ class Spreadsheet implements JsonSerializable
 
     /**
      * Get sheet count.
+     *
+     * @return int
      */
-    public function getSheetCount(): int
+    public function getSheetCount()
     {
         return count($this->workSheetCollection);
     }
@@ -810,7 +826,7 @@ class Spreadsheet implements JsonSerializable
      *
      * @return Worksheet
      */
-    public function setActiveSheetIndexByName(string $worksheetName)
+    public function setActiveSheetIndexByName($worksheetName)
     {
         if (($worksheet = $this->getSheetByName($worksheetName)) instanceof Worksheet) {
             $this->setActiveSheetIndex($this->getIndex($worksheet));
@@ -826,7 +842,7 @@ class Spreadsheet implements JsonSerializable
      *
      * @return string[]
      */
-    public function getSheetNames(): array
+    public function getSheetNames()
     {
         $returnValue = [];
         $worksheetCount = $this->getSheetCount();
@@ -842,8 +858,10 @@ class Spreadsheet implements JsonSerializable
      *
      * @param Worksheet $worksheet External sheet to add
      * @param null|int $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     *
+     * @return Worksheet
      */
-    public function addExternalSheet(Worksheet $worksheet, $sheetIndex = null): Worksheet
+    public function addExternalSheet(Worksheet $worksheet, $sheetIndex = null)
     {
         if ($this->sheetNameExists($worksheet->getTitle())) {
             throw new Exception("Workbook already contains a worksheet named '{$worksheet->getTitle()}'. Rename the external sheet first.");
@@ -891,7 +909,9 @@ class Spreadsheet implements JsonSerializable
     {
         return array_filter(
             $this->definedNames,
-            fn (DefinedName $definedName): bool => $definedName->isFormula() === self::DEFINED_NAME_IS_RANGE
+            function (DefinedName $definedName) {
+                return $definedName->isFormula() === self::DEFINED_NAME_IS_RANGE;
+            }
         );
     }
 
@@ -904,7 +924,9 @@ class Spreadsheet implements JsonSerializable
     {
         return array_filter(
             $this->definedNames,
-            fn (DefinedName $definedName): bool => $definedName->isFormula() === self::DEFINED_NAME_IS_FORMULA
+            function (DefinedName $definedName) {
+                return $definedName->isFormula() === self::DEFINED_NAME_IS_FORMULA;
+            }
         );
     }
 
@@ -1098,16 +1120,20 @@ class Spreadsheet implements JsonSerializable
 
     /**
      * Get worksheet iterator.
+     *
+     * @return Iterator
      */
-    public function getWorksheetIterator(): Iterator
+    public function getWorksheetIterator()
     {
         return new Iterator($this);
     }
 
     /**
      * Copy workbook (!= clone!).
+     *
+     * @return Spreadsheet
      */
-    public function copy(): self
+    public function copy()
     {
         $filename = File::temporaryFilename();
         $writer = new XlsxWriter($this);
@@ -1171,8 +1197,10 @@ class Spreadsheet implements JsonSerializable
 
     /**
      * Check if style exists in style collection.
+     *
+     * @return bool
      */
-    public function cellXfExists(Style $cellStyleIndex): bool
+    public function cellXfExists(Style $cellStyleIndex)
     {
         return in_array($cellStyleIndex, $this->cellXfCollection, true);
     }
@@ -1600,6 +1628,16 @@ class Spreadsheet implements JsonSerializable
     }
 
     /**
+     * Silliness to mollify Scrutinizer.
+     *
+     * @codeCoverageIgnore
+     */
+    public function getSharedComponent(): Style
+    {
+        return new Style();
+    }
+
+    /**
      * @throws Exception
      *
      * @return mixed
@@ -1615,40 +1653,5 @@ class Spreadsheet implements JsonSerializable
     public function jsonSerialize(): mixed
     {
         throw new Exception('Spreadsheet objects cannot be json encoded');
-    }
-
-    public function resetThemeFonts(): void
-    {
-        $majorFontLatin = $this->theme->getMajorFontLatin();
-        $minorFontLatin = $this->theme->getMinorFontLatin();
-        foreach ($this->cellXfCollection as $cellStyleXf) {
-            $scheme = $cellStyleXf->getFont()->getScheme();
-            if ($scheme === 'major') {
-                $cellStyleXf->getFont()->setName($majorFontLatin)->setScheme($scheme);
-            } elseif ($scheme === 'minor') {
-                $cellStyleXf->getFont()->setName($minorFontLatin)->setScheme($scheme);
-            }
-        }
-        foreach ($this->cellStyleXfCollection as $cellStyleXf) {
-            $scheme = $cellStyleXf->getFont()->getScheme();
-            if ($scheme === 'major') {
-                $cellStyleXf->getFont()->setName($majorFontLatin)->setScheme($scheme);
-            } elseif ($scheme === 'minor') {
-                $cellStyleXf->getFont()->setName($minorFontLatin)->setScheme($scheme);
-            }
-        }
-    }
-
-    public function getTableByName(string $tableName): ?Table
-    {
-        $table = null;
-        foreach ($this->workSheetCollection as $sheet) {
-            $table = $sheet->getTableByName($tableName);
-            if ($table !== null) {
-                break;
-            }
-        }
-
-        return $table;
     }
 }

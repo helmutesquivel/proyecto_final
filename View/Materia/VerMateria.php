@@ -2,7 +2,7 @@
 
 use Controller\MateriaController;
 
-//if(!empty($_SESSION['id'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 
 $materia = new MateriaController;
 
@@ -10,7 +10,7 @@ $listado = $materia->mostrar();
 
 ?>
 <h1>Cursos</h1>
-<a href='index.php?action=materiaPdf'><button type="button" class="btn btn-success">Descargar Pdf</button></a>
+<a href='index.php?action=materiaPdf'><button type="button" class="btn btn-warning mr-4">Descargar Pdf</button></a> <a href='index.php?action=materiaExcel'><button type="button" class="btn btn-success">Descargar Excel</button></a>
 <table class="table table-hove mt-3">
     <thead>
         <tr class="table-success">
@@ -32,4 +32,4 @@ $listado = $materia->mostrar();
         <?php endforeach; ?>
     </tbody>
 </table>
-<?php //} ?>
+<?php } ?>

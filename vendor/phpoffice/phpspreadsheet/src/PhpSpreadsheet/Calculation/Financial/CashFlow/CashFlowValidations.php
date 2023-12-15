@@ -19,12 +19,15 @@ class CashFlowValidations extends FinancialValidations
         return $rate;
     }
 
-    public static function validatePeriodType(mixed $type): int
+    /**
+     * @param mixed $type
+     */
+    public static function validatePeriodType($type): int
     {
         $rate = self::validateInt($type);
         if (
-            $type !== FinancialConstants::PAYMENT_END_OF_PERIOD
-            && $type !== FinancialConstants::PAYMENT_BEGINNING_OF_PERIOD
+            $type !== FinancialConstants::PAYMENT_END_OF_PERIOD &&
+            $type !== FinancialConstants::PAYMENT_BEGINNING_OF_PERIOD
         ) {
             throw new Exception(ExcelError::NAN());
         }
@@ -32,12 +35,18 @@ class CashFlowValidations extends FinancialValidations
         return $rate;
     }
 
-    public static function validatePresentValue(mixed $presentValue): float
+    /**
+     * @param mixed $presentValue
+     */
+    public static function validatePresentValue($presentValue): float
     {
         return self::validateFloat($presentValue);
     }
 
-    public static function validateFutureValue(mixed $futureValue): float
+    /**
+     * @param mixed $futureValue
+     */
+    public static function validateFutureValue($futureValue): float
     {
         return self::validateFloat($futureValue);
     }

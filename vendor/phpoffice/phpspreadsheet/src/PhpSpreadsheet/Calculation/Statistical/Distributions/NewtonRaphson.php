@@ -18,7 +18,7 @@ class NewtonRaphson
     }
 
     /** @return float|string */
-    public function execute(float $probability): string|int|float
+    public function execute(float $probability)
     {
         $xLo = 100;
         $xHi = 0;

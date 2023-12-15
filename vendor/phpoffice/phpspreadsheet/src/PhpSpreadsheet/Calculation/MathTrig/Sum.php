@@ -5,6 +5,7 @@ namespace PhpOffice\PhpSpreadsheet\Calculation\MathTrig;
 use PhpOffice\PhpSpreadsheet\Calculation\Functions;
 use PhpOffice\PhpSpreadsheet\Calculation\Information\ErrorValue;
 use PhpOffice\PhpSpreadsheet\Calculation\Information\ExcelError;
+use PhpOffice\PhpSpreadsheet\Calculation\Information\Value;
 
 class Sum
 {
@@ -18,9 +19,9 @@ class Sum
      *
      * @param mixed ...$args Data values
      *
-     * @return float|int|string
+     * @return float|string
      */
-    public static function sumIgnoringStrings(mixed ...$args)
+    public static function sumIgnoringStrings(...$args)
     {
         $returnValue = 0;
 
@@ -47,23 +48,26 @@ class Sum
      *
      * @param mixed ...$args Data values
      *
-     * @return float|int|string
+     * @return float|string
      */
-    public static function sumErroringStrings(mixed ...$args)
+    public static function sumErroringStrings(...$args)
     {
         $returnValue = 0;
         // Loop through the arguments
         $aArgs = Functions::flattenArrayIndexed($args);
         foreach ($aArgs as $k => $arg) {
             // Is it a numeric value?
-            if (is_numeric($arg)) {
+            if (is_numeric($arg) || empty($arg)) {
+                if (is_string($arg)) {
+                    $arg = (int) $arg;
+                }
                 $returnValue += $arg;
             } elseif (is_bool($arg)) {
                 $returnValue += (int) $arg;
             } elseif (ErrorValue::isError($arg)) {
                 return $arg;
+            // ignore non-numerics from cell, but fail as literals (except null)
             } elseif ($arg !== null && !Functions::isCellValue($k)) {
-                // ignore non-numerics from cell, but fail as literals (except null)
                 return ExcelError::VALUE();
             }
         }
@@ -79,9 +83,9 @@ class Sum
      *
      * @param mixed ...$args Data values
      *
-     * @return float|int|string The result, or a string containing an error
+     * @return float|string The result, or a string containing an error
      */
-    public static function product(mixed ...$args): string|int|float
+    public static function product(...$args)
     {
         $arrayList = $args;
 

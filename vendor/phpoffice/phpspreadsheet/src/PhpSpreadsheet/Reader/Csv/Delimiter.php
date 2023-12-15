@@ -9,9 +9,11 @@ class Delimiter
     /** @var resource */
     protected $fileHandle;
 
-    protected string $escapeCharacter;
+    /** @var string */
+    protected $escapeCharacter;
 
-    protected string $enclosure;
+    /** @var string */
+    protected $enclosure;
 
     /** @var array */
     protected $counts = [];
@@ -90,7 +92,9 @@ class Delimiter
 
             $meanSquareDeviations[$delimiter] = array_reduce(
                 $series,
-                fn ($sum, $value): int|float => $sum + ($value - $median) ** 2
+                function ($sum, $value) use ($median) {
+                    return $sum + ($value - $median) ** 2;
+                }
             ) / count($series);
         }
 

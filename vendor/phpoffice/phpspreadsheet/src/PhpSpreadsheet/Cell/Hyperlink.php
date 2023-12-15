@@ -48,7 +48,7 @@ class Hyperlink
      *
      * @return $this
      */
-    public function setUrl($url): static
+    public function setUrl($url)
     {
         $this->url = $url;
 
@@ -72,7 +72,7 @@ class Hyperlink
      *
      * @return $this
      */
-    public function setTooltip($tooltip): static
+    public function setTooltip($tooltip)
     {
         $this->tooltip = $tooltip;
 
@@ -81,13 +81,18 @@ class Hyperlink
 
     /**
      * Is this hyperlink internal? (to another worksheet).
+     *
+     * @return bool
      */
-    public function isInternal(): bool
+    public function isInternal()
     {
-        return str_contains($this->url, 'sheet://');
+        return strpos($this->url, 'sheet://') !== false;
     }
 
-    public function getTypeHyperlink(): string
+    /**
+     * @return string
+     */
+    public function getTypeHyperlink()
     {
         return $this->isInternal() ? '' : 'External';
     }
@@ -97,12 +102,12 @@ class Hyperlink
      *
      * @return string Hash code
      */
-    public function getHashCode(): string
+    public function getHashCode()
     {
         return md5(
-            $this->url
-            . $this->tooltip
-            . __CLASS__
+            $this->url .
+            $this->tooltip .
+            __CLASS__
         );
     }
 }

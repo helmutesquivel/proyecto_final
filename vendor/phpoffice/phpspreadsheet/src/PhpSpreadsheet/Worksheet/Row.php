@@ -4,7 +4,12 @@ namespace PhpOffice\PhpSpreadsheet\Worksheet;
 
 class Row
 {
-    private Worksheet $worksheet;
+    /**
+     * \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet.
+     *
+     * @var Worksheet
+     */
+    private $worksheet;
 
     /**
      * Row index.
@@ -30,7 +35,7 @@ class Row
      */
     public function __destruct()
     {
-        unset($this->worksheet);
+        $this->worksheet = null; // @phpstan-ignore-line
     }
 
     /**
@@ -47,9 +52,9 @@ class Row
      * @param string $startColumn The column address at which to start iterating
      * @param string $endColumn Optionally, the column address at which to stop iterating
      */
-    public function getCellIterator($startColumn = 'A', $endColumn = null, bool $iterateOnlyExistingCells = false): RowCellIterator
+    public function getCellIterator($startColumn = 'A', $endColumn = null): RowCellIterator
     {
-        return new RowCellIterator($this->worksheet, $this->rowIndex, $startColumn, $endColumn, $iterateOnlyExistingCells);
+        return new RowCellIterator($this->worksheet, $this->rowIndex, $startColumn, $endColumn);
     }
 
     /**
@@ -58,9 +63,9 @@ class Row
      * @param string $startColumn The column address at which to start iterating
      * @param string $endColumn Optionally, the column address at which to stop iterating
      */
-    public function getColumnIterator($startColumn = 'A', $endColumn = null, bool $iterateOnlyExistingCells = false): RowCellIterator
+    public function getColumnIterator($startColumn = 'A', $endColumn = null): RowCellIterator
     {
-        return $this->getCellIterator($startColumn, $endColumn, $iterateOnlyExistingCells);
+        return $this->getCellIterator($startColumn, $endColumn);
     }
 
     /**
@@ -90,6 +95,7 @@ class Row
         $cellIterator = $this->getCellIterator($startColumn, $endColumn);
         $cellIterator->setIterateOnlyExistingCells(true);
         foreach ($cellIterator as $cell) {
+            /** @scrutinizer ignore-call */
             $value = $cell->getValue();
             if ($value === null && $nullValueCellIsEmpty === true) {
                 continue;

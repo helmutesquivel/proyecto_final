@@ -2,7 +2,7 @@
 
 use Controller\DireccionController;
 
-//if(!empty($_SESSION['id'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 
 $direccion = new DireccionController;
 
@@ -33,4 +33,4 @@ $listado = $direccion->mostrar();
         <?php endforeach; ?>
     </tbody>
 </table>
-<?php //} ?>
+<?php } ?>

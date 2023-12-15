@@ -8,8 +8,10 @@ abstract class WriterPart
 {
     /**
      * Parent Ods object.
+     *
+     * @var Ods
      */
-    private Ods $parentWriter;
+    private $parentWriter;
 
     /**
      * Get Ods writer.

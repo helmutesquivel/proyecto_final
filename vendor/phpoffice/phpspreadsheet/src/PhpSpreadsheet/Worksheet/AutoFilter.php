@@ -12,19 +12,22 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Worksheet\AutoFilter\Column\Rule;
-use Stringable;
 
-class AutoFilter implements Stringable
+class AutoFilter
 {
     /**
      * Autofilter Worksheet.
+     *
+     * @var null|Worksheet
      */
-    private ?Worksheet $workSheet;
+    private $workSheet;
 
     /**
      * Autofilter Range.
+     *
+     * @var string
      */
-    private string $range;
+    private $range = '';
 
     /**
      * Autofilter Column Ruleset.
@@ -49,7 +52,7 @@ class AutoFilter implements Stringable
     /**
      * Create a new AutoFilter.
      *
-     * @param AddressRange|array{0: int, 1: int, 2: int, 3: int}|array{0: int, 1: int}|string $range
+     * @param AddressRange|array<int>|string $range
      *            A simple string containing a Cell range like 'A1:E10' is permitted
      *              or passing in an array of [$fromColumnIndex, $fromRow, $toColumnIndex, $toRow] (e.g. [3, 5, 6, 8]),
      *              or an AddressRange object.
@@ -60,13 +63,8 @@ class AutoFilter implements Stringable
             [, $range] = Worksheet::extractSheetTitle(Validations::validateCellRange($range), true);
         }
 
-        $this->range = $range ?? '';
+        $this->range = $range;
         $this->workSheet = $worksheet;
-    }
-
-    public function __destruct()
-    {
-        $this->workSheet = null;
     }
 
     /**
@@ -84,7 +82,7 @@ class AutoFilter implements Stringable
      *
      * @return $this
      */
-    public function setParent(?Worksheet $worksheet = null): static
+    public function setParent(?Worksheet $worksheet = null)
     {
         $this->evaluated = false;
         $this->workSheet = $worksheet;
@@ -105,7 +103,7 @@ class AutoFilter implements Stringable
     /**
      * Set AutoFilter Cell Range.
      *
-     * @param AddressRange|array{0: int, 1: int, 2: int, 3: int}|array{0: int, 1: int}|string $range
+     * @param AddressRange|array<int>|string $range
      *            A simple string containing a Cell range like 'A1:E10' or a Cell address like 'A1' is permitted
      *              or passing in an array of [$fromColumnIndex, $fromRow, $toColumnIndex, $toRow] (e.g. [3, 5, 6, 8]),
      *              or an AddressRange object.
@@ -174,7 +172,7 @@ class AutoFilter implements Stringable
      *
      * @return int The column offset within the autofilter range
      */
-    public function testColumnInRange($column): int
+    public function testColumnInRange($column)
     {
         if (empty($this->range)) {
             throw new Exception('No autofilter range is defined.');
@@ -242,7 +240,7 @@ class AutoFilter implements Stringable
      *
      * @return $this
      */
-    public function setColumn($columnObjectOrString): static
+    public function setColumn($columnObjectOrString)
     {
         $this->evaluated = false;
         if ((is_string($columnObjectOrString)) && (!empty($columnObjectOrString))) {
@@ -272,7 +270,7 @@ class AutoFilter implements Stringable
      *
      * @return $this
      */
-    public function clearColumn($column): static
+    public function clearColumn($column)
     {
         $this->evaluated = false;
         $this->testColumnInRange($column);
@@ -296,7 +294,7 @@ class AutoFilter implements Stringable
      *
      * @return $this
      */
-    public function shiftColumn($fromColumn, $toColumn): static
+    public function shiftColumn($fromColumn, $toColumn)
     {
         $this->evaluated = false;
         $fromColumn = strtoupper($fromColumn);
@@ -318,11 +316,12 @@ class AutoFilter implements Stringable
     /**
      * Test if cell value is in the defined set of values.
      *
+     * @param mixed $cellValue
      * @param mixed[] $dataSet
      *
      * @return bool
      */
-    protected static function filterTestInSimpleDataSet(mixed $cellValue, array $dataSet)
+    private static function filterTestInSimpleDataSet($cellValue, $dataSet)
     {
         $dataSetValues = $dataSet['filterValues'];
         $blanks = $dataSet['blanks'];
@@ -336,11 +335,12 @@ class AutoFilter implements Stringable
     /**
      * Test if cell value is in the defined set of Excel date values.
      *
+     * @param mixed $cellValue
      * @param mixed[] $dataSet
      *
      * @return bool
      */
-    protected static function filterTestInDateGroupSet(mixed $cellValue, array $dataSet)
+    private static function filterTestInDateGroupSet($cellValue, $dataSet)
     {
         $dateSet = $dataSet['filterValues'];
         $blanks = $dataSet['blanks'];
@@ -367,7 +367,7 @@ class AutoFilter implements Stringable
             }
             foreach ($dateSet as $dateValue) {
                 //    Use of substr to extract value at the appropriate group level
-                if (str_starts_with($dtVal, $dateValue)) {
+                if (substr($dtVal, 0, strlen($dateValue)) == $dateValue) {
                     return true;
                 }
             }
@@ -379,9 +379,12 @@ class AutoFilter implements Stringable
     /**
      * Test if cell value is within a set of values defined by a ruleset.
      *
+     * @param mixed $cellValue
      * @param mixed[] $ruleSet
+     *
+     * @return bool
      */
-    protected static function filterTestInCustomDataSet(mixed $cellValue, $ruleSet): bool
+    private static function filterTestInCustomDataSet($cellValue, $ruleSet)
     {
         /** @var array[] */
         $dataSet = $ruleSet['filterRules'];
@@ -434,11 +437,20 @@ class AutoFilter implements Stringable
                         break;
                 }
             } elseif ($ruleValue == '') {
-                $retVal = match ($ruleOperator) {
-                    Rule::AUTOFILTER_COLUMN_RULE_EQUAL => ($cellValue == '') || ($cellValue === null),
-                    Rule::AUTOFILTER_COLUMN_RULE_NOTEQUAL => ($cellValue != '') && ($cellValue !== null),
-                    default => true,
-                };
+                switch ($ruleOperator) {
+                    case Rule::AUTOFILTER_COLUMN_RULE_EQUAL:
+                        $retVal = (($cellValue == '') || ($cellValue === null));
+
+                        break;
+                    case Rule::AUTOFILTER_COLUMN_RULE_NOTEQUAL:
+                        $retVal = (($cellValue != '') && ($cellValue !== null));
+
+                        break;
+                    default:
+                        $retVal = true;
+
+                        break;
+                }
             } else {
                 //    String values are always tested for equality, factoring in for wildcards (hence a regexp test)
                 switch ($ruleOperator) {
@@ -492,9 +504,12 @@ class AutoFilter implements Stringable
     /**
      * Test if cell date value is matches a set of values defined by a set of months.
      *
+     * @param mixed $cellValue
      * @param mixed[] $monthSet
+     *
+     * @return bool
      */
-    protected static function filterTestInPeriodDateSet(mixed $cellValue, $monthSet): bool
+    private static function filterTestInPeriodDateSet($cellValue, $monthSet)
     {
         //    Blank cells are always ignored, so return a FALSE
         if (($cellValue == '') || ($cellValue === null)) {
@@ -737,7 +752,7 @@ class AutoFilter implements Stringable
      *
      * @return mixed[]
      */
-    private function dynamicFilterDateRange($dynamicRuleType, AutoFilter\Column &$filterColumn): array
+    private function dynamicFilterDateRange($dynamicRuleType, AutoFilter\Column &$filterColumn)
     {
         $ruleValues = [];
         $callBack = [__CLASS__, self::DATE_FUNCTIONS[$dynamicRuleType]]; // What if not found?
@@ -764,11 +779,15 @@ class AutoFilter implements Stringable
     /**
      * Apply the AutoFilter rules to the AutoFilter Range.
      *
+     * @param string $columnID
+     * @param int $startRow
+     * @param int $endRow
      * @param ?string $ruleType
+     * @param mixed $ruleValue
      *
      * @return mixed
      */
-    private function calculateTopTenValue(string $columnID, int $startRow, int $endRow, $ruleType, mixed $ruleValue)
+    private function calculateTopTenValue($columnID, $startRow, $endRow, $ruleType, $ruleValue)
     {
         $range = $columnID . $startRow . ':' . $columnID . $endRow;
         $retVal = null;
@@ -795,7 +814,7 @@ class AutoFilter implements Stringable
      *
      * @return $this
      */
-    public function showHideRows(): static
+    public function showHideRows()
     {
         if ($this->workSheet === null) {
             return $this;
@@ -842,38 +861,38 @@ class AutoFilter implements Stringable
                             }
                             $date = $time = '';
                             if (
-                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_YEAR]))
-                                && ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_YEAR] !== '')
+                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_YEAR])) &&
+                                ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_YEAR] !== '')
                             ) {
                                 $date .= sprintf('%04d', $ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_YEAR]);
                             }
                             if (
-                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_MONTH]))
-                                && ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_MONTH] != '')
+                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_MONTH])) &&
+                                ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_MONTH] != '')
                             ) {
                                 $date .= sprintf('%02d', $ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_MONTH]);
                             }
                             if (
-                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_DAY]))
-                                && ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_DAY] !== '')
+                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_DAY])) &&
+                                ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_DAY] !== '')
                             ) {
                                 $date .= sprintf('%02d', $ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_DAY]);
                             }
                             if (
-                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_HOUR]))
-                                && ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_HOUR] !== '')
+                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_HOUR])) &&
+                                ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_HOUR] !== '')
                             ) {
                                 $time .= sprintf('%02d', $ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_HOUR]);
                             }
                             if (
-                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_MINUTE]))
-                                && ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_MINUTE] !== '')
+                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_MINUTE])) &&
+                                ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_MINUTE] !== '')
                             ) {
                                 $time .= sprintf('%02d', $ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_MINUTE]);
                             }
                             if (
-                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_SECOND]))
-                                && ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_SECOND] !== '')
+                                (isset($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_SECOND])) &&
+                                ($ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_SECOND] !== '')
                             ) {
                                 $time .= sprintf('%02d', $ruleValue[Rule::AUTOFILTER_RULETYPE_DATEGROUP_SECOND]);
                             }
@@ -922,13 +941,14 @@ class AutoFilter implements Stringable
                         //    We should only ever have one Dynamic Filter Rule anyway
                         $dynamicRuleType = $rule->getGrouping();
                         if (
-                            ($dynamicRuleType == Rule::AUTOFILTER_RULETYPE_DYNAMIC_ABOVEAVERAGE)
-                            || ($dynamicRuleType == Rule::AUTOFILTER_RULETYPE_DYNAMIC_BELOWAVERAGE)
+                            ($dynamicRuleType == Rule::AUTOFILTER_RULETYPE_DYNAMIC_ABOVEAVERAGE) ||
+                            ($dynamicRuleType == Rule::AUTOFILTER_RULETYPE_DYNAMIC_BELOWAVERAGE)
                         ) {
                             //    Number (Average) based
                             //    Calculate the average
                             $averageFormula = '=AVERAGE(' . $columnID . ($rangeStart[1] + 1) . ':' . $columnID . $rangeEnd[1] . ')';
-                            $average = Calculation::getInstance($this->workSheet->getParent())->calculateFormula($averageFormula, null, $this->workSheet->getCell('A1'));
+                            $spreadsheet = ($this->workSheet === null) ? null : $this->workSheet->getParent();
+                            $average = Calculation::getInstance($spreadsheet)->calculateFormula($averageFormula, null, $this->workSheet->getCell('A1'));
                             while (is_array($average)) {
                                 $average = array_pop($average);
                             }
@@ -1020,20 +1040,16 @@ class AutoFilter implements Stringable
             foreach ($columnFilterTests as $columnID => $columnFilterTest) {
                 $cellValue = $this->workSheet->getCell($columnID . $row)->getCalculatedValue();
                 //    Execute the filter test
-                $result // $result && // phpstan says $result is always true here
+                $result = // $result && // phpstan says $result is always true here
                     // @phpstan-ignore-next-line
-                    = call_user_func_array([self::class, $columnFilterTest['method']], [$cellValue, $columnFilterTest['arguments']]);
+                    call_user_func_array([self::class, $columnFilterTest['method']], [$cellValue, $columnFilterTest['arguments']]);
                 //    If filter test has resulted in FALSE, exit the loop straightaway rather than running any more tests
                 if (!$result) {
                     break;
                 }
             }
             //    Set show/hide for the row based on the result of the autoFilter result
-            //    If the RowDimension object has not been allocated yet and the row should be visible,
-            //    then we can avoid any operation since the rows are visible by default (saves a lot of memory)
-            if ($result === false || $this->workSheet->rowDimensionExists((int) $row)) {
-                $this->workSheet->getRowDimension((int) $row)->setVisible($result);
-            }
+            $this->workSheet->getRowDimension((int) $row)->setVisible($result);
         }
         $this->evaluated = true;
 
@@ -1049,7 +1065,7 @@ class AutoFilter implements Stringable
         if ($startRow === $endRow && $this->workSheet !== null) {
             try {
                 $rowIterator = $this->workSheet->getRowIterator($startRow + 1);
-            } catch (Exception) {
+            } catch (Exception $e) {
                 // If there are no rows below $startRow
                 return $startRow;
             }
@@ -1095,7 +1111,7 @@ class AutoFilter implements Stringable
      * toString method replicates previous behavior by returning the range if object is
      * referenced as a property of its parent.
      */
-    public function __toString(): string
+    public function __toString()
     {
         return (string) $this->range;
     }

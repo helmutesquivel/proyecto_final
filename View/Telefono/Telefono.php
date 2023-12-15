@@ -6,7 +6,7 @@ use Controller\CaTelefonoController;
 $telefono = new TelefonoController();
 $alumno = new AlumnoController();
 $catelefono = new CaTelefonoController();
-
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 ?>
 
 <h1>Crear Telefono de Alumno</h1>
@@ -48,7 +48,7 @@ $catelefono = new CaTelefonoController();
         </div>
         <div class="form-group">
             <div class="d-grid gap-2 mt-3">
-                <button class="btn btn-lg btn-primary" type="submit">Crear Municipio</button>
+                <button class="btn btn-lg btn-primary" type="submit">Crear Telefono Alumno</button>
 
             </div>
         </div>
@@ -63,7 +63,7 @@ $catelefono = new CaTelefonoController();
                     Error
                  </div>";
         }
-        //}//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
+        }//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
         ?>
     </form>
 </div>

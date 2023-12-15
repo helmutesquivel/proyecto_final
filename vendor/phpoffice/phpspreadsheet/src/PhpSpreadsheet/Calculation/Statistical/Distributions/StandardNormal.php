@@ -30,7 +30,7 @@ class StandardNormal
      *         If an array of numbers is passed as an argument, then the returned result will also be an array
      *            with the same dimensions
      */
-    public static function cumulative(mixed $value)
+    public static function cumulative($value)
     {
         return Normal::distribution($value, 0, 1, true);
     }
@@ -55,7 +55,7 @@ class StandardNormal
      *         If an array of numbers is passed as an argument, then the returned result will also be an array
      *            with the same dimensions
      */
-    public static function distribution(mixed $value, mixed $cumulative)
+    public static function distribution($value, $cumulative)
     {
         return Normal::distribution($value, 0, 1, $cumulative);
     }
@@ -76,7 +76,7 @@ class StandardNormal
      *         If an array of numbers is passed as an argument, then the returned result will also be an array
      *            with the same dimensions
      */
-    public static function inverse(mixed $value)
+    public static function inverse($value)
     {
         return Normal::inverse($value, 0, 1);
     }
@@ -94,7 +94,7 @@ class StandardNormal
      *         If an array of numbers is passed as an argument, then the returned result will also be an array
      *            with the same dimensions
      */
-    public static function gauss(mixed $value): array|string|float
+    public static function gauss($value)
     {
         if (is_array($value)) {
             return self::evaluateSingleArgumentArray([self::class, __FUNCTION__], $value);
@@ -128,7 +128,7 @@ class StandardNormal
      *         If an array of numbers is passed as an argument, then the returned result will also be an array
      *            with the same dimensions
      */
-    public static function zTest(mixed $dataSet, mixed $m0, mixed $sigma = null)
+    public static function zTest($dataSet, $m0, $sigma = null)
     {
         if (is_array($m0) || is_array($sigma)) {
             return self::evaluateArrayArgumentsSubsetFrom([self::class, __FUNCTION__], 1, $dataSet, $m0, $sigma);
@@ -148,12 +148,6 @@ class StandardNormal
 
         $sub1 = Averages::average($dataSet);
 
-        if (!is_numeric($sub1)) {
-            return $sub1;
-        }
-
-        $temp = self::cumulative(($sub1 - $m0) / ($sigma / sqrt($n)));
-
-        return 1 - (is_numeric($temp) ? $temp : 0);
+        return is_numeric($sub1) ? (1 - self::cumulative(($sub1 - $m0) / ($sigma / sqrt($n)))) : $sub1;
     }
 }

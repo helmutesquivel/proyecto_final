@@ -435,8 +435,10 @@ class ConvertUOM
     /**
      *    getConversionGroups
      * Returns a list of the different conversion groups for UOM conversions.
+     *
+     * @return array
      */
-    public static function getConversionCategories(): array
+    public static function getConversionCategories()
     {
         $conversionGroups = [];
         foreach (self::$conversionUnits as $conversionUnit) {
@@ -451,8 +453,10 @@ class ConvertUOM
      * Returns an array of units of measure, for a specified conversion group, or for all groups.
      *
      * @param string $category The group whose units of measure you want to retrieve
+     *
+     * @return array
      */
-    public static function getConversionCategoryUnits($category = null): array
+    public static function getConversionCategoryUnits($category = null)
     {
         $conversionGroups = [];
         foreach (self::$conversionUnits as $conversionUnit => $conversionGroup) {
@@ -468,8 +472,10 @@ class ConvertUOM
      * getConversionGroupUnitDetails.
      *
      * @param string $category The group whose units of measure you want to retrieve
+     *
+     * @return array
      */
-    public static function getConversionCategoryUnitDetails($category = null): array
+    public static function getConversionCategoryUnitDetails($category = null)
     {
         $conversionGroups = [];
         foreach (self::$conversionUnits as $conversionUnit => $conversionGroup) {
@@ -540,7 +546,7 @@ class ConvertUOM
         try {
             [$fromUOM, $fromCategory, $fromMultiplier] = self::getUOMDetails($fromUOM);
             [$toUOM, $toCategory, $toMultiplier] = self::getUOMDetails($toUOM);
-        } catch (Exception) {
+        } catch (Exception $e) {
             return ExcelError::NA();
         }
 
@@ -558,7 +564,7 @@ class ConvertUOM
         } elseif ($fromUOM === $toUOM) {
             return $value / $toMultiplier;
         } elseif ($fromCategory === self::CATEGORY_TEMPERATURE) {
-            return self::convertTemperature($fromUOM, $toUOM, $value);
+            return self::convertTemperature($fromUOM, $toUOM, /** @scrutinizer ignore-type */ $value);
         }
 
         $baseValue = $value * (1.0 / self::$unitConversions[$fromCategory][$fromUOM]);
@@ -674,11 +680,15 @@ class ConvertUOM
 
     private static function resolveTemperatureSynonyms(string $uom): string
     {
-        return match ($uom) {
-            'fah' => 'F',
-            'cel' => 'C',
-            'kel' => 'K',
-            default => $uom,
-        };
+        switch ($uom) {
+            case 'fah':
+                return 'F';
+            case 'cel':
+                return 'C';
+            case 'kel':
+                return 'K';
+        }
+
+        return $uom;
     }
 }

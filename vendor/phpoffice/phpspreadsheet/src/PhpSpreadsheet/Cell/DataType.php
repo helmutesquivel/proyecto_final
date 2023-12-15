@@ -53,7 +53,7 @@ class DataType
      *
      * @return RichText|string Sanitized value
      */
-    public static function checkString($textValue): RichText|string|array
+    public static function checkString($textValue)
     {
         if ($textValue instanceof RichText) {
             // TODO: Sanitize Rich-Text string (max. character count is 32,767)
@@ -76,7 +76,7 @@ class DataType
      *
      * @return string Sanitized value
      */
-    public static function checkErrorCode(mixed $value): string
+    public static function checkErrorCode($value)
     {
         $value = (string) $value;
 

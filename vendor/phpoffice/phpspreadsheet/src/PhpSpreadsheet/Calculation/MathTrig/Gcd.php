@@ -42,7 +42,7 @@ class Gcd
      *
      * @return float|int|string Greatest Common Divisor, or a string containing an error
      */
-    public static function evaluate(mixed ...$args)
+    public static function evaluate(...$args)
     {
         try {
             $arrayArgs = [];

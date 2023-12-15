@@ -9,9 +9,11 @@ use SimpleXMLElement;
 
 class Properties
 {
-    private XmlScanner $securityScanner;
+    /** @var XmlScanner */
+    private $securityScanner;
 
-    private DocumentProperties $docProps;
+    /** @var DocumentProperties */
+    private $docProps;
 
     public function __construct(XmlScanner $securityScanner, DocumentProperties $docProps)
     {
@@ -19,7 +21,10 @@ class Properties
         $this->docProps = $docProps;
     }
 
-    private static function nullOrSimple(mixed $obj): ?SimpleXMLElement
+    /**
+     * @param mixed $obj
+     */
+    private static function nullOrSimple($obj): ?SimpleXMLElement
     {
         return ($obj instanceof SimpleXMLElement) ? $obj : null;
     }
@@ -68,9 +73,6 @@ class Properties
             if (isset($xmlCore->Manager)) {
                 $this->docProps->setManager((string) $xmlCore->Manager);
             }
-            if (isset($xmlCore->HyperlinkBase)) {
-                $this->docProps->setHyperlinkBase((string) $xmlCore->HyperlinkBase);
-            }
         }
     }
 
@@ -98,8 +100,9 @@ class Properties
 
     /**
      * @param null|array|false $array
+     * @param mixed $key
      */
-    private static function getArrayItem($array, mixed $key = 0): ?SimpleXMLElement
+    private static function getArrayItem($array, $key = 0): ?SimpleXMLElement
     {
         return is_array($array) ? ($array[$key] ?? null) : null;
     }

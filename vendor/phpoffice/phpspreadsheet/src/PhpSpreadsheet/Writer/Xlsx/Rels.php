@@ -169,7 +169,7 @@ class Rels extends WriterPart
      *
      * @return string XML Output
      */
-    public function writeWorksheetRelationships(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $worksheet, $worksheetId = 1, $includeCharts = false, $tableRef = 1, array &$zipContent = [])
+    public function writeWorksheetRelationships(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet $worksheet, $worksheetId = 1, $includeCharts = false, $tableRef = 1)
     {
         // Create XML writer
         $objWriter = null;
@@ -219,20 +219,6 @@ class Rels extends WriterPart
                 Namespaces::RELATIONSHIPS_DRAWING,
                 $relPath
             );
-        }
-
-        $backgroundImage = $worksheet->getBackgroundImage();
-        if ($backgroundImage !== '') {
-            $rId = 'Bg';
-            $uniqueName = md5(mt_rand(0, 9999) . time() . mt_rand(0, 9999));
-            $relPath = "../media/$uniqueName." . $worksheet->getBackgroundExtension();
-            $this->writeRelationship(
-                $objWriter,
-                $rId,
-                Namespaces::IMAGE,
-                $relPath
-            );
-            $zipContent["xl/media/$uniqueName." . $worksheet->getBackgroundExtension()] = $backgroundImage;
         }
 
         // Write hyperlink relationships?
@@ -310,7 +296,7 @@ class Rels extends WriterPart
         }
 
         foreach ($unparsedLoadedData['sheets'][$worksheet->getCodeName()][$relationship] as $rId => $value) {
-            if (!str_starts_with($rId, '_headerfooter_vml')) {
+            if (substr($rId, 0, 17) !== '_headerfooter_vml') {
                 $this->writeRelationship(
                     $objWriter,
                     $rId,
@@ -473,7 +459,7 @@ class Rels extends WriterPart
      * @param string $target Relationship target
      * @param string $targetMode Relationship target mode
      */
-    private function writeRelationship(XMLWriter $objWriter, $id, string $type, $target, string $targetMode = ''): void
+    private function writeRelationship(XMLWriter $objWriter, $id, $type, $target, $targetMode = ''): void
     {
         if ($type != '' && $target != '') {
             // Write relationship

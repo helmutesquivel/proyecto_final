@@ -36,7 +36,7 @@ class Service
 
         try {
             $response = $client->sendRequest($request);
-        } catch (ClientExceptionInterface) {
+        } catch (ClientExceptionInterface $e) {
             return ExcelError::VALUE(); // cURL error
         }
 
@@ -60,9 +60,11 @@ class Service
      * Excel Function:
      *        urlEncode(text)
      *
+     * @param mixed $text
+     *
      * @return string the url encoded output
      */
-    public static function urlEncode(mixed $text): string|array
+    public static function urlEncode($text)
     {
         if (!is_string($text)) {
             return ExcelError::VALUE();

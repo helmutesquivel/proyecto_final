@@ -49,13 +49,14 @@ class Trend
     private static $trendCache = [];
 
     /**
+     * @param string $trendType
      * @param array $yValues
      * @param array $xValues
      * @param bool $const
      *
      * @return mixed
      */
-    public static function calculate(string $trendType = self::TREND_BEST_FIT, $yValues = [], $xValues = [], $const = true)
+    public static function calculate($trendType = self::TREND_BEST_FIT, $yValues = [], $xValues = [], $const = true)
     {
         //    Calculate number of points in each dataset
         $nY = count($yValues);
@@ -104,6 +105,7 @@ class Trend
                     $className = '\PhpOffice\PhpSpreadsheet\Shared\Trend\\' . $trendType . 'BestFit';
                     //* @phpstan-ignore-next-line
                     $bestFit[$trendMethod] = new $className($yValues, $xValues, $const);
+                    //* @phpstan-ignore-next-line
                     $bestFitValue[$trendMethod] = $bestFit[$trendMethod]->getGoodnessOfFit();
                 }
                 if ($trendType != self::TREND_BEST_FIT_NO_POLY) {

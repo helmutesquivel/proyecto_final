@@ -48,7 +48,8 @@ class Gnumeric extends BaseReader
      */
     private $spreadsheet;
 
-    private ReferenceHelper $referenceHelper;
+    /** @var ReferenceHelper */
+    private $referenceHelper;
 
     /** @var array */
     public static $mappings = [
@@ -79,15 +80,17 @@ class Gnumeric extends BaseReader
      */
     public function canRead(string $filename): bool
     {
-        $data = null;
-        if (File::testFileNoThrow($filename)) {
-            $data = $this->gzfileGetContents($filename);
-            if (!str_contains($data, self::NAMESPACE_GNM)) {
-                $data = '';
+        // Check if gzlib functions are available
+        if (File::testFileNoThrow($filename) && function_exists('gzread')) {
+            // Read signature data (first 3 bytes)
+            $fh = fopen($filename, 'rb');
+            if ($fh !== false) {
+                $data = fread($fh, 2);
+                fclose($fh);
             }
         }
 
-        return !empty($data);
+        return isset($data) && $data === chr(0x1F) . chr(0x8B);
     }
 
     private static function matchXml(XMLReader $xml, string $expectedLocalName): bool
@@ -99,17 +102,17 @@ class Gnumeric extends BaseReader
 
     /**
      * Reads names of the worksheets from a file, without parsing the whole file to a Spreadsheet object.
+     *
+     * @param string $filename
+     *
+     * @return array
      */
-    public function listWorksheetNames(string $filename): array
+    public function listWorksheetNames($filename)
     {
         File::assertFile($filename);
-        if (!$this->canRead($filename)) {
-            throw new Exception($filename . ' is an invalid Gnumeric file.');
-        }
 
         $xml = new XMLReader();
-        $contents = $this->gzfileGetContents($filename);
-        $xml->xml($contents, null, Settings::getLibXmlLoaderOptions());
+        $xml->xml($this->getSecurityScannerOrThrow()->scanFile('compress.zlib://' . realpath($filename)), null, Settings::getLibXmlLoaderOptions());
         $xml->setParserProperty(2, true);
 
         $worksheetNames = [];
@@ -128,17 +131,17 @@ class Gnumeric extends BaseReader
 
     /**
      * Return worksheet info (Name, Last Column Letter, Last Column Index, Total Rows, Total Columns).
+     *
+     * @param string $filename
+     *
+     * @return array
      */
-    public function listWorksheetInfo(string $filename): array
+    public function listWorksheetInfo($filename)
     {
         File::assertFile($filename);
-        if (!$this->canRead($filename)) {
-            throw new Exception($filename . ' is an invalid Gnumeric file.');
-        }
 
         $xml = new XMLReader();
-        $contents = $this->gzfileGetContents($filename);
-        $xml->xml($contents, null, Settings::getLibXmlLoaderOptions());
+        $xml->xml($this->getSecurityScannerOrThrow()->scanFile('compress.zlib://' . realpath($filename)), null, Settings::getLibXmlLoaderOptions());
         $xml->setParserProperty(2, true);
 
         $worksheetInfo = [];
@@ -177,26 +180,18 @@ class Gnumeric extends BaseReader
 
     /**
      * @param string $filename
+     *
+     * @return string
      */
-    private function gzfileGetContents($filename): string
+    private function gzfileGetContents($filename)
     {
+        $file = @gzopen($filename, 'rb');
         $data = '';
-        $contents = @file_get_contents($filename);
-        if ($contents !== false) {
-            if (str_starts_with($contents, "\x1f\x8b")) {
-                // Check if gzlib functions are available
-                if (function_exists('gzdecode')) {
-                    $contents = @gzdecode($contents);
-                    if ($contents !== false) {
-                        $data = $contents;
-                    }
-                }
-            } else {
-                $data = $contents;
+        if ($file !== false) {
+            while (!gzeof($file)) {
+                $data .= gzread($file, 1024);
             }
-        }
-        if ($data !== '') {
-            $data = $this->getSecurityScannerOrThrow()->scan($data);
+            gzclose($file);
         }
 
         return $data;
@@ -222,7 +217,10 @@ class Gnumeric extends BaseReader
         }
     }
 
-    private static function testSimpleXml(mixed $value): SimpleXMLElement
+    /**
+     * @param mixed $value
+     */
+    private static function testSimpleXml($value): SimpleXMLElement
     {
         return ($value instanceof SimpleXMLElement) ? $value : new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><root></root>');
     }
@@ -247,13 +245,10 @@ class Gnumeric extends BaseReader
     {
         $this->spreadsheet = $spreadsheet;
         File::assertFile($filename);
-        if (!$this->canRead($filename)) {
-            throw new Exception($filename . ' is an invalid Gnumeric file.');
-        }
 
         $gFileData = $this->gzfileGetContents($filename);
 
-        $xml2 = simplexml_load_string($gFileData, 'SimpleXMLElement', Settings::getLibXmlLoaderOptions());
+        $xml2 = simplexml_load_string($this->getSecurityScannerOrThrow()->scan($gFileData), 'SimpleXMLElement', Settings::getLibXmlLoaderOptions());
         $xml = self::testSimpleXml($xml2);
 
         $gnmXML = $xml->children(self::NAMESPACE_GNM);
@@ -367,7 +362,7 @@ class Gnumeric extends BaseReader
         //    Handle Merged Cells in this worksheet
         if ($sheet !== null && isset($sheet->MergedRegions)) {
             foreach ($sheet->MergedRegions->Merge as $mergeCells) {
-                if (str_contains((string) $mergeCells, ':')) {
+                if (strpos((string) $mergeCells, ':') !== false) {
                     $this->spreadsheet->getActiveSheet()->mergeCells($mergeCells, Worksheet::MERGE_CELL_CONTENT_HIDE);
                 }
             }
@@ -519,7 +514,7 @@ class Gnumeric extends BaseReader
             foreach ($gnmXML->Names->Name as $definedName) {
                 $name = (string) $definedName->name;
                 $value = (string) $definedName->value;
-                if (stripos($value, '#REF!') !== false || empty($value)) {
+                if (stripos($value, '#REF!') !== false) {
                     continue;
                 }
 

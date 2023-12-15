@@ -70,8 +70,10 @@ class TableStyle
 
     /**
      * Theme.
+     *
+     * @var string
      */
-    private string $theme;
+    private $theme;
 
     /**
      * Show First Column.
@@ -103,8 +105,10 @@ class TableStyle
 
     /**
      * Table.
+     *
+     * @var null|Table
      */
-    private ?Table $table = null;
+    private $table;
 
     /**
      * Create a new Table Style.

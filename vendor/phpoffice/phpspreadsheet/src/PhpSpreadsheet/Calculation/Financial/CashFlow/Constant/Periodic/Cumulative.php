@@ -31,13 +31,13 @@ class Cumulative
      * @return float|string
      */
     public static function interest(
-        mixed $rate,
-        mixed $periods,
-        mixed $presentValue,
-        mixed $start,
-        mixed $end,
-        mixed $type = FinancialConstants::PAYMENT_END_OF_PERIOD
-    ): string|float|int {
+        $rate,
+        $periods,
+        $presentValue,
+        $start,
+        $end,
+        $type = FinancialConstants::PAYMENT_END_OF_PERIOD
+    ) {
         $rate = Functions::flattenSingleValue($rate);
         $periods = Functions::flattenSingleValue($periods);
         $presentValue = Functions::flattenSingleValue($presentValue);
@@ -96,13 +96,13 @@ class Cumulative
      * @return float|string
      */
     public static function principal(
-        mixed $rate,
-        mixed $periods,
-        mixed $presentValue,
-        mixed $start,
-        mixed $end,
-        mixed $type = FinancialConstants::PAYMENT_END_OF_PERIOD
-    ): string|float|int {
+        $rate,
+        $periods,
+        $presentValue,
+        $start,
+        $end,
+        $type = FinancialConstants::PAYMENT_END_OF_PERIOD
+    ) {
         $rate = Functions::flattenSingleValue($rate);
         $periods = Functions::flattenSingleValue($periods);
         $presentValue = Functions::flattenSingleValue($presentValue);

@@ -49,11 +49,24 @@ class Styles extends BaseParserClass
         $this->workbookPalette = $palette;
     }
 
+    /**
+     * Cast SimpleXMLElement to bool to overcome Scrutinizer problem.
+     *
+     * @param mixed $value
+     */
+    private static function castBool($value): bool
+    {
+        return (bool) $value;
+    }
+
     private function getStyleAttributes(SimpleXMLElement $value): SimpleXMLElement
     {
-        $attr = $value->attributes('');
-        if ($attr === null || count($attr) === 0) {
-            $attr = $value->attributes($this->namespace);
+        $attr = null;
+        if (self::castBool($value)) {
+            $attr = $value->attributes('');
+            if ($attr === null || count($attr) === 0) {
+                $attr = $value->attributes($this->namespace);
+            }
         }
 
         return Xlsx::testSimpleXml($attr);
@@ -122,10 +135,6 @@ class Styles extends BaseParserClass
                     $fontStyle->setSubscript(true);
                 }
             }
-        }
-        if (isset($fontStyleXml->scheme)) {
-            $attr = $this->getStyleAttributes($fontStyleXml->scheme);
-            $fontStyle->setScheme((string) $attr['val']);
         }
     }
 
@@ -244,14 +253,10 @@ class Styles extends BaseParserClass
 
     public function readAlignmentStyle(Alignment $alignment, SimpleXMLElement $alignmentXml): void
     {
-        $horizontal = (string) $this->getAttribute($alignmentXml, 'horizontal');
-        if ($horizontal !== '') {
-            $alignment->setHorizontal($horizontal);
-        }
-        $vertical = (string) $this->getAttribute($alignmentXml, 'vertical');
-        if ($vertical !== '') {
-            $alignment->setVertical($vertical);
-        }
+        $horizontal = $this->getAttribute($alignmentXml, 'horizontal');
+        $alignment->setHorizontal($horizontal);
+        $vertical = $this->getAttribute($alignmentXml, 'vertical');
+        $alignment->setVertical((string) $vertical);
 
         $textRotation = (int) $this->getAttribute($alignmentXml, 'textRotation');
         if ($textRotation > 90) {
@@ -438,7 +443,7 @@ class Styles extends BaseParserClass
      *
      * @return stdClass
      */
-    private static function getArrayItem(mixed $array, int $key = 0)
+    private static function getArrayItem($array, int $key = 0)
     {
         return is_array($array) ? ($array[$key] ?? null) : null;
     }

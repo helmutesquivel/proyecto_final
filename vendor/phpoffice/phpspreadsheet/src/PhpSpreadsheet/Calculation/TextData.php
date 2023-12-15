@@ -36,7 +36,7 @@ class TextData
      *
      * @return null|array|string
      */
-    public static function TRIMNONPRINTABLE(mixed $stringValue = '')
+    public static function TRIMNONPRINTABLE($stringValue = '')
     {
         return TextData\Trim::nonPrintable($stringValue);
     }
@@ -49,8 +49,10 @@ class TextData
      * @see TextData\Trim::spaces()
      *
      * @param mixed $stringValue Value to check
+     *
+     * @return array|string
      */
-    public static function TRIMSPACES(mixed $stringValue = ''): string|array
+    public static function TRIMSPACES($stringValue = '')
     {
         return TextData\Trim::spaces($stringValue);
     }
@@ -66,7 +68,7 @@ class TextData
      *
      * @return array|int|string A string if arguments are invalid
      */
-    public static function ASCIICODE($characters): string|int|array
+    public static function ASCIICODE($characters)
     {
         return TextData\CharacterConvert::code($characters);
     }
@@ -79,8 +81,10 @@ class TextData
      * @see TextData\Concatenate::CONCATENATE()
      *
      * @param array $args
+     *
+     * @return string
      */
-    public static function CONCATENATE(...$args): string
+    public static function CONCATENATE(...$args)
     {
         return TextData\Concatenate::CONCATENATE(...$args);
     }
@@ -156,7 +160,7 @@ class TextData
      *
      * @return array|string
      */
-    public static function FIXEDFORMAT(mixed $value, $decimals = 2, $no_commas = false)
+    public static function FIXEDFORMAT($value, $decimals = 2, $no_commas = false)
     {
         return TextData\Format::FIXEDFORMAT($value, $decimals, $no_commas);
     }
@@ -170,8 +174,10 @@ class TextData
      *
      * @param array|string $value Value
      * @param array|int $chars Number of characters
+     *
+     * @return array|string
      */
-    public static function LEFT($value = '', $chars = 1): string|array
+    public static function LEFT($value = '', $chars = 1)
     {
         return TextData\Extract::left($value, $chars);
     }
@@ -186,8 +192,10 @@ class TextData
      * @param array|string $value Value
      * @param array|int $start Start character
      * @param array|int $chars Number of characters
+     *
+     * @return array|string
      */
-    public static function MID($value = '', $start = 1, $chars = null): string|array
+    public static function MID($value = '', $start = 1, $chars = null)
     {
         return TextData\Extract::mid($value, $start, $chars);
     }
@@ -201,8 +209,10 @@ class TextData
      *
      * @param array|string $value Value
      * @param array|int $chars Number of characters
+     *
+     * @return array|string
      */
-    public static function RIGHT($value = '', $chars = 1): string|array
+    public static function RIGHT($value = '', $chars = 1)
     {
         return TextData\Extract::right($value, $chars);
     }
@@ -215,8 +225,10 @@ class TextData
      * @see TextData\Text::length()
      *
      * @param string $value Value
+     *
+     * @return array|int
      */
-    public static function STRINGLENGTH($value = ''): int|array
+    public static function STRINGLENGTH($value = '')
     {
         return TextData\Text::length($value);
     }
@@ -231,8 +243,10 @@ class TextData
      * @see TextData\CaseConvert::lower()
      *
      * @param array|string $mixedCaseString
+     *
+     * @return array|string
      */
-    public static function LOWERCASE($mixedCaseString): string|array
+    public static function LOWERCASE($mixedCaseString)
     {
         return TextData\CaseConvert::lower($mixedCaseString);
     }
@@ -247,8 +261,10 @@ class TextData
      * @see TextData\CaseConvert::upper()
      *
      * @param string $mixedCaseString
+     *
+     * @return array|string
      */
-    public static function UPPERCASE($mixedCaseString): string|array
+    public static function UPPERCASE($mixedCaseString)
     {
         return TextData\CaseConvert::upper($mixedCaseString);
     }
@@ -263,8 +279,10 @@ class TextData
      * @see TextData\CaseConvert::proper()
      *
      * @param array|string $mixedCaseString
+     *
+     * @return array|string
      */
-    public static function PROPERCASE($mixedCaseString): string|array
+    public static function PROPERCASE($mixedCaseString)
     {
         return TextData\CaseConvert::proper($mixedCaseString);
     }
@@ -315,8 +333,10 @@ class TextData
      * @see TextData\Text::test()
      *
      * @param mixed $testValue Value to check
+     *
+     * @return null|array|string
      */
-    public static function RETURNSTRING(mixed $testValue = ''): string|array
+    public static function RETURNSTRING($testValue = '')
     {
         return TextData\Text::test($testValue);
     }
@@ -333,7 +353,7 @@ class TextData
      *
      * @return array|string
      */
-    public static function TEXTFORMAT(mixed $value, $format)
+    public static function TEXTFORMAT($value, $format)
     {
         return TextData\Format::TEXTFORMAT($value, $format);
     }
@@ -349,7 +369,7 @@ class TextData
      *
      * @return array|DateTimeInterface|float|int|string A string if arguments are invalid
      */
-    public static function VALUE(mixed $value = '')
+    public static function VALUE($value = '')
     {
         return TextData\Format::VALUE($value);
     }
@@ -367,7 +387,7 @@ class TextData
      *
      * @return array|float|string
      */
-    public static function NUMBERVALUE(mixed $value = '', $decimalSeparator = null, $groupSeparator = null)
+    public static function NUMBERVALUE($value = '', $decimalSeparator = null, $groupSeparator = null)
     {
         return TextData\Format::NUMBERVALUE($value, $decimalSeparator, $groupSeparator);
     }
@@ -380,8 +400,13 @@ class TextData
      * @deprecated 1.18.0
      *      Use the exact() method in the TextData\Text class instead
      * @see TextData\Text::exact()
+     *
+     * @param mixed $value1
+     * @param mixed $value2
+     *
+     * @return array|bool
      */
-    public static function EXACT(mixed $value1, mixed $value2): bool|array
+    public static function EXACT($value1, $value2)
     {
         return TextData\Text::exact($value1, $value2);
     }
@@ -393,9 +418,13 @@ class TextData
      *      Use the TEXTJOIN() method in the TextData\Concatenate class instead
      * @see TextData\Concatenate::TEXTJOIN()
      *
+     * @param mixed $delimiter
+     * @param mixed $ignoreEmpty
+     * @param mixed $args
+     *
      * @return array|string
      */
-    public static function TEXTJOIN(mixed $delimiter, mixed $ignoreEmpty, mixed ...$args)
+    public static function TEXTJOIN($delimiter, $ignoreEmpty, ...$args)
     {
         return TextData\Concatenate::TEXTJOIN($delimiter, $ignoreEmpty, ...$args);
     }
@@ -414,7 +443,7 @@ class TextData
      *
      * @return array|string
      */
-    public static function builtinREPT($str, mixed $number)
+    public static function builtinREPT($str, $number)
     {
         return TextData\Concatenate::builtinREPT($str, $number);
     }

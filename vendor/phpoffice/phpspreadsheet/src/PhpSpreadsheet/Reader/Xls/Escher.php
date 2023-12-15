@@ -63,8 +63,10 @@ class Escher
 
     /**
      * Create a new Escher instance.
+     *
+     * @param mixed $object
      */
-    public function __construct(mixed $object)
+    public function __construct($object)
     {
         $this->object = $object;
     }
@@ -551,7 +553,10 @@ class Escher
         $this->applyAttribute('setEndOffsetY', $endOffsetY);
     }
 
-    private function applyAttribute(string $name, mixed $value): void
+    /**
+     * @param mixed $value
+     */
+    private function applyAttribute(string $name, $value): void
     {
         if (method_exists($this->object, $name)) {
             $this->object->$name($value);
@@ -576,7 +581,7 @@ class Escher
      * @param string $data Binary data
      * @param int $n Number of properties
      */
-    private function readOfficeArtRGFOPTE(string $data, int $n): void
+    private function readOfficeArtRGFOPTE($data, $n): void
     {
         $splicedComplexData = substr($data, 6 * $n);
 

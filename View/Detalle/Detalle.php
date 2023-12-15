@@ -6,7 +6,7 @@ use Controller\MateriaController;
 $detalle = new DetalleController();
 $alumno = new AlumnoController();
 $materia = new MateriaController();
-
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 ?>
 
 <h1>Crear Asignacion de Cursos</h1>
@@ -63,7 +63,7 @@ $materia = new MateriaController();
                     Error
                  </div>";
         }
-        //}//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
+       }//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
         ?>
     </form>
 </div>

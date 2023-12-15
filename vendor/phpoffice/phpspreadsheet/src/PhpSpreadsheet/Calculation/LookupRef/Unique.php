@@ -18,7 +18,7 @@ class Unique
      *
      * @return mixed The unique values from the search range
      */
-    public static function unique(mixed $lookupVector, mixed $byColumn = false, mixed $exactlyOnce = false)
+    public static function unique($lookupVector, $byColumn = false, $exactlyOnce = false)
     {
         if (!is_array($lookupVector)) {
             // Scalars are always returned "as is"
@@ -104,7 +104,9 @@ class Unique
     {
         $caseInsensitiveCounts = array_count_values(
             array_map(
-                fn (string $value): string => StringHelper::strToUpper($value),
+                function (string $value) {
+                    return StringHelper::strToUpper($value);
+                },
                 $caseSensitiveLookupValues
             )
         );
@@ -131,7 +133,9 @@ class Unique
     {
         return array_filter(
             $values,
-            fn ($value): bool => $value === 1
+            function ($value) {
+                return $value === 1;
+            }
         );
     }
 }

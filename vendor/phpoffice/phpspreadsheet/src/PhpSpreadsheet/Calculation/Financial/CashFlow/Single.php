@@ -19,8 +19,10 @@ class Single
      *
      * @param mixed $principal the present value
      * @param float[] $schedule an array of interest rates to apply
+     *
+     * @return float|string
      */
-    public static function futureValue(mixed $principal, $schedule): string|float
+    public static function futureValue($principal, $schedule)
     {
         $principal = Functions::flattenSingleValue($principal);
         $schedule = Functions::flattenArray($schedule);
@@ -50,7 +52,7 @@ class Single
      *
      * @return float|string Result, or a string containing an error
      */
-    public static function periods(mixed $rate, mixed $presentValue, mixed $futureValue): string|float
+    public static function periods($rate, $presentValue, $futureValue)
     {
         $rate = Functions::flattenSingleValue($rate);
         $presentValue = Functions::flattenSingleValue($presentValue);
@@ -83,7 +85,7 @@ class Single
      *
      * @return float|string Result, or a string containing an error
      */
-    public static function interestRate($periods = 0.0, $presentValue = 0.0, $futureValue = 0.0): string|float
+    public static function interestRate($periods = 0.0, $presentValue = 0.0, $futureValue = 0.0)
     {
         $periods = Functions::flattenSingleValue($periods);
         $presentValue = Functions::flattenSingleValue($presentValue);

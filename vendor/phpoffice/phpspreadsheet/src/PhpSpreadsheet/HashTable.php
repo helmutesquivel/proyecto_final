@@ -101,17 +101,22 @@ class HashTable
 
     /**
      * Count.
+     *
+     * @return int
      */
-    public function count(): int
+    public function count()
     {
         return count($this->items);
     }
 
     /**
      * Get index for hash code.
+     *
+     * @return false|int Index
      */
-    public function getIndexForHashCode(string $hashCode): false|int
+    public function getIndexForHashCode(string $hashCode)
     {
+        // Scrutinizer thinks the following could return string. It is wrong.
         return array_search($hashCode, $this->keyMap, true);
     }
 

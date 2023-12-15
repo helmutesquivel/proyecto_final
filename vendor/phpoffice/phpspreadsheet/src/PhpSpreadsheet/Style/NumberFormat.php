@@ -157,8 +157,10 @@ class NumberFormat extends Supervisor
      * Build style array from subcomponents.
      *
      * @param array $array
+     *
+     * @return array
      */
-    public function getStyleArray($array): array
+    public function getStyleArray($array)
     {
         return ['numberFormat' => $array];
     }
@@ -178,7 +180,7 @@ class NumberFormat extends Supervisor
      *
      * @return $this
      */
-    public function applyFromArray(array $styleArray): static
+    public function applyFromArray(array $styleArray)
     {
         if ($this->isSupervisor) {
             $this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($this->getStyleArray($styleArray));
@@ -215,7 +217,7 @@ class NumberFormat extends Supervisor
      *
      * @return $this
      */
-    public function setFormatCode(string $formatCode): static
+    public function setFormatCode(string $formatCode)
     {
         if ($formatCode == '') {
             $formatCode = self::FORMAT_GENERAL;
@@ -242,6 +244,7 @@ class NumberFormat extends Supervisor
             return $this->getSharedComponent()->getBuiltInFormatCode();
         }
 
+        // Scrutinizer says this could return true. It is wrong.
         return $this->builtInFormatCode;
     }
 
@@ -252,7 +255,7 @@ class NumberFormat extends Supervisor
      *
      * @return $this
      */
-    public function setBuiltInFormatCode(int $formatCodeIndex): static
+    public function setBuiltInFormatCode(int $formatCodeIndex)
     {
         if ($this->isSupervisor) {
             $styleArray = $this->getStyleArray(['formatCode' => self::builtInFormatCode($formatCodeIndex)]);
@@ -423,9 +426,9 @@ class NumberFormat extends Supervisor
         }
 
         return md5(
-            $this->formatCode
-            . $this->builtInFormatCode
-            . __CLASS__
+            $this->formatCode .
+            $this->builtInFormatCode .
+            __CLASS__
         );
     }
 
@@ -439,7 +442,7 @@ class NumberFormat extends Supervisor
      *
      * @return string Formatted string
      */
-    public static function toFormattedString(mixed $value, $format, $callBack = null)
+    public static function toFormattedString($value, $format, $callBack = null)
     {
         return NumberFormat\Formatter::toFormattedString($value, $format, $callBack);
     }

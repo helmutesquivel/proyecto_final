@@ -15,13 +15,17 @@ class ChartColor
         self::EXCEL_COLOR_TYPE_STANDARD,
     ];
 
-    private string $value = '';
+    /** @var string */
+    private $value = '';
 
-    private string $type = '';
+    /** @var string */
+    private $type = '';
 
-    private ?int $alpha = null;
+    /** @var ?int */
+    private $alpha;
 
-    private ?int $brightness = null;
+    /** @var ?int */
+    private $brightness;
 
     /**
      * @param string|string[] $value
@@ -90,10 +94,10 @@ class ChartColor
     public function setColorProperties(?string $color, $alpha = null, ?string $type = null, $brightness = null): self
     {
         if (empty($type) && !empty($color)) {
-            if (str_starts_with($color, '*')) {
+            if (substr($color, 0, 1) === '*') {
                 $type = 'schemeClr';
                 $color = substr($color, 1);
-            } elseif (str_starts_with($color, '/')) {
+            } elseif (substr($color, 0, 1) === '/') {
                 $type = 'prstClr';
                 $color = substr($color, 1);
             } elseif (preg_match('/^[0-9A-Fa-f]{6}$/', $color) === 1) {

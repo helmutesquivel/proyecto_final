@@ -51,9 +51,8 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
                 return $this->setImproperFraction($matches, $cell);
             }
 
-            $decimalSeparatorNoPreg = StringHelper::getDecimalSeparator();
-            $decimalSeparator = preg_quote($decimalSeparatorNoPreg, '/');
-            $thousandsSeparator = preg_quote(StringHelper::getThousandsSeparator(), '/');
+            $decimalSeparator = preg_quote(StringHelper::getDecimalSeparator());
+            $thousandsSeparator = preg_quote(StringHelper::getThousandsSeparator());
 
             // Check for percentage
             if (preg_match('/^\-?\d*' . $decimalSeparator . '?\d*\s?\%$/', preg_replace('/(\d)' . $thousandsSeparator . '(\d)/u', '$1$2', $value))) {
@@ -65,9 +64,9 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
                 // Convert value to number
                 $sign = ($matches['PrefixedSign'] ?? $matches['PrefixedSign2'] ?? $matches['PostfixedSign']) ?? null;
                 $currencyCode = $matches['PrefixedCurrency'] ?? $matches['PostfixedCurrency'];
-                $value = (float) ($sign . trim(str_replace([$decimalSeparatorNoPreg, $currencyCode, ' ', '-'], ['.', '', '', ''], preg_replace('/(\d)' . $thousandsSeparator . '(\d)/u', '$1$2', $value)))); // @phpstan-ignore-line
+                $value = (float) ($sign . trim(str_replace([$decimalSeparator, $currencyCode, ' ', '-'], ['.', '', '', ''], preg_replace('/(\d)' . $thousandsSeparator . '(\d)/u', '$1$2', $value)))); // @phpstan-ignore-line
 
-                return $this->setCurrency($value, $cell, $currencyCode ?? '');
+                return $this->setCurrency($value, $cell, $currencyCode); // @phpstan-ignore-line
             }
 
             // Check for time without seconds e.g. '9:45', '09:45'
@@ -85,7 +84,7 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
                 // Convert value to number
                 $cell->setValueExplicit($d, DataType::TYPE_NUMERIC);
                 // Determine style. Either there is a time part or not. Look for ':'
-                if (str_contains($value, ':')) {
+                if (strpos($value, ':') !== false) {
                     $formatCode = 'yyyy-mm-dd h:mm';
                 } else {
                     $formatCode = 'yyyy-mm-dd';
@@ -97,7 +96,7 @@ class AdvancedValueBinder extends DefaultValueBinder implements IValueBinder
             }
 
             // Check for newline character "\n"
-            if (str_contains($value, "\n")) {
+            if (strpos($value, "\n") !== false) {
                 $cell->setValueExplicit($value, DataType::TYPE_STRING);
                 // Set style
                 $cell->getWorksheet()->getStyle($cell->getCoordinate())

@@ -7,7 +7,7 @@ use Controller\MunicipioController;
 $municipio = new MunicipioController;
 
 $listado = $municipio->mostrar();
-
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 ?>
 <h1>Municipio</h1>
 
@@ -33,4 +33,4 @@ $listado = $municipio->mostrar();
         <?php endforeach; ?>
     </tbody>
 </table>
-<?php //} ?>
+<?php } ?>

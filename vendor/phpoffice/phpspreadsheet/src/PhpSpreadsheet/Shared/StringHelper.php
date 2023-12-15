@@ -35,7 +35,7 @@ class StringHelper
     /**
      * Currency code.
      *
-     * @var ?string
+     * @var string
      */
     private static $currencyCode;
 
@@ -288,8 +288,10 @@ class StringHelper
      * element or in the shared string <t> element.
      *
      * @param string $textValue Value to unescape
+     *
+     * @return string
      */
-    public static function controlCharacterOOXML2PHP($textValue): string
+    public static function controlCharacterOOXML2PHP($textValue)
     {
         self::buildCharacterSets();
 
@@ -308,8 +310,10 @@ class StringHelper
      * element or in the shared string <t> element.
      *
      * @param string $textValue Value to escape
+     *
+     * @return string
      */
-    public static function controlCharacterPHP2OOXML($textValue): string
+    public static function controlCharacterPHP2OOXML($textValue)
     {
         self::buildCharacterSets();
 
@@ -326,9 +330,19 @@ class StringHelper
         mb_substitute_character(65533); // Unicode substitution character
         // Phpstan does not think this can return false.
         $returnValue = mb_convert_encoding($textValue, 'UTF-8', 'UTF-8');
-        mb_substitute_character($subst);
+        mb_substitute_character(/** @scrutinizer ignore-type */ $subst);
 
-        return $returnValue;
+        return self::returnString($returnValue);
+    }
+
+    /**
+     * Strictly to satisfy Scrutinizer.
+     *
+     * @param mixed $value
+     */
+    private static function returnString($value): string
+    {
+        return is_string($value) ? $value : '';
     }
 
     /**
@@ -398,9 +412,11 @@ class StringHelper
      */
     public static function UTF8toBIFF8UnicodeLong(string $textValue): string
     {
+        // character count
+        $ln = self::countCharacters($textValue, 'UTF-8');
+
         // characters
         $chars = self::convertEncoding($textValue, 'UTF-16LE', 'UTF-8');
-        $ln = (int) (strlen($chars) / 2);  // N.B. - strlen, not mb_strlen issue #642
 
         return pack('vC', $ln, 0x0001) . $chars;
     }
@@ -420,7 +436,7 @@ class StringHelper
             }
         }
 
-        return mb_convert_encoding($textValue, $to, $from);
+        return self::returnString(mb_convert_encoding($textValue, $to, $from));
     }
 
     /**
@@ -433,18 +449,6 @@ class StringHelper
     public static function countCharacters(string $textValue, string $encoding = 'UTF-8'): int
     {
         return mb_strlen($textValue, $encoding);
-    }
-
-    /**
-     * Get character count using mb_strwidth rather than mb_strlen.
-     *
-     * @param string $encoding Encoding
-     *
-     * @return int Character count
-     */
-    public static function countCharactersDbcs(string $textValue, string $encoding = 'UTF-8'): int
-    {
-        return mb_strwidth($textValue, $encoding);
     }
 
     /**
@@ -551,9 +555,9 @@ class StringHelper
      * Set the decimal separator. Only used by NumberFormat::toFormattedString()
      * to format output by \PhpOffice\PhpSpreadsheet\Writer\Html and \PhpOffice\PhpSpreadsheet\Writer\Pdf.
      *
-     * @param ?string $separator Character for decimal separator
+     * @param string $separator Character for decimal separator
      */
-    public static function setDecimalSeparator(?string $separator): void
+    public static function setDecimalSeparator(string $separator): void
     {
         self::$decimalSeparator = $separator;
     }
@@ -582,9 +586,9 @@ class StringHelper
      * Set the thousands separator. Only used by NumberFormat::toFormattedString()
      * to format output by \PhpOffice\PhpSpreadsheet\Writer\Html and \PhpOffice\PhpSpreadsheet\Writer\Pdf.
      *
-     * @param ?string $separator Character for thousands separator
+     * @param string $separator Character for thousands separator
      */
-    public static function setThousandsSeparator(?string $separator): void
+    public static function setThousandsSeparator(string $separator): void
     {
         self::$thousandsSeparator = $separator;
     }
@@ -618,9 +622,9 @@ class StringHelper
      * Set the currency code. Only used by NumberFormat::toFormattedString()
      *        to format output by \PhpOffice\PhpSpreadsheet\Writer\Html and \PhpOffice\PhpSpreadsheet\Writer\Pdf.
      *
-     * @param ?string $currencyCode Character for currency code
+     * @param string $currencyCode Character for currency code
      */
-    public static function setCurrencyCode(?string $currencyCode): void
+    public static function setCurrencyCode(string $currencyCode): void
     {
         self::$currencyCode = $currencyCode;
     }
@@ -637,7 +641,7 @@ class StringHelper
         self::buildCharacterSets();
 
         // If there is no escape character in the string there is nothing to do
-        if (!str_contains($textValue, '')) {
+        if (strpos($textValue, '') === false) {
             return $textValue;
         }
 

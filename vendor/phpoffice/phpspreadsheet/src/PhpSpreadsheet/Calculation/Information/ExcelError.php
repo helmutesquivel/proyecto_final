@@ -41,7 +41,10 @@ class ExcelError
      */
     public static $errorCodes = self::ERROR_CODES;
 
-    public static function throwError(mixed $value): string
+    /**
+     * @param mixed $value
+     */
+    public static function throwError($value): string
     {
         return in_array($value, self::ERROR_CODES, true) ? $value : self::ERROR_CODES['value'];
     }
@@ -50,8 +53,10 @@ class ExcelError
      * ERROR_TYPE.
      *
      * @param mixed $value Value to check
+     *
+     * @return array|int|string
      */
-    public static function type(mixed $value = ''): array|int|string
+    public static function type($value = '')
     {
         if (is_array($value)) {
             return self::evaluateSingleArgumentArray([self::class, __FUNCTION__], $value);

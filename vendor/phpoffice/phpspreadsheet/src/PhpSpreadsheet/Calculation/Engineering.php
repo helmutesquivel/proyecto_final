@@ -2,6 +2,7 @@
 
 namespace PhpOffice\PhpSpreadsheet\Calculation;
 
+use Complex\Complex;
 use PhpOffice\PhpSpreadsheet\Calculation\Engineering\ComplexFunctions;
 use PhpOffice\PhpSpreadsheet\Calculation\Engineering\ComplexOperations;
 
@@ -18,6 +19,28 @@ class Engineering
      * @see Engineering\Constants::EULER
      */
     public const EULER = 2.71828182845904523536;
+
+    /**
+     * parseComplex.
+     *
+     * Parses a complex number into its real and imaginary parts, and an I or J suffix
+     *
+     * @deprecated 1.12.0 No longer used by internal code. Please use the \Complex\Complex class instead
+     *
+     * @param string $complexNumber The complex number
+     *
+     * @return mixed[] Indexed on "real", "imaginary" and "suffix"
+     */
+    public static function parseComplex($complexNumber)
+    {
+        $complex = new Complex($complexNumber);
+
+        return [
+            'real' => $complex->getReal(),
+            'imaginary' => $complex->getImaginary(),
+            'suffix' => $complex->getSuffix(),
+        ];
+    }
 
     /**
      * BESSELI.
@@ -143,7 +166,7 @@ class Engineering
      *
      * @return array|string
      */
-    public static function BINTODEC(mixed $x)
+    public static function BINTODEC($x)
     {
         return Engineering\ConvertBinary::toDecimal($x);
     }
@@ -175,7 +198,7 @@ class Engineering
      *
      * @return array|string
      */
-    public static function BINTOHEX(mixed $x, mixed $places = null)
+    public static function BINTOHEX($x, $places = null)
     {
         return Engineering\ConvertBinary::toHex($x, $places);
     }
@@ -207,7 +230,7 @@ class Engineering
      *
      * @return array|string
      */
-    public static function BINTOOCT(mixed $x, mixed $places = null)
+    public static function BINTOOCT($x, $places = null)
     {
         return Engineering\ConvertBinary::toOctal($x, $places);
     }
@@ -240,8 +263,10 @@ class Engineering
      *                                If places is not an integer, it is truncated.
      *                                If places is nonnumeric, DEC2BIN returns the #VALUE! error value.
      *                                If places is zero or negative, DEC2BIN returns the #NUM! error value.
+     *
+     * @return array|string
      */
-    public static function DECTOBIN(mixed $x, mixed $places = null): string|array
+    public static function DECTOBIN($x, $places = null)
     {
         return Engineering\ConvertDecimal::toBinary($x, $places);
     }
@@ -274,8 +299,10 @@ class Engineering
      *                                If places is not an integer, it is truncated.
      *                                If places is nonnumeric, DEC2HEX returns the #VALUE! error value.
      *                                If places is zero or negative, DEC2HEX returns the #NUM! error value.
+     *
+     * @return array|string
      */
-    public static function DECTOHEX(mixed $x, mixed $places = null): string|array
+    public static function DECTOHEX($x, $places = null)
     {
         return Engineering\ConvertDecimal::toHex($x, $places);
     }
@@ -308,8 +335,10 @@ class Engineering
      *                                If places is not an integer, it is truncated.
      *                                If places is nonnumeric, DEC2OCT returns the #VALUE! error value.
      *                                If places is zero or negative, DEC2OCT returns the #NUM! error value.
+     *
+     * @return array|string
      */
-    public static function DECTOOCT(mixed $x, mixed $places = null): string|array
+    public static function DECTOOCT($x, $places = null)
     {
         return Engineering\ConvertDecimal::toOctal($x, $places);
     }
@@ -345,7 +374,7 @@ class Engineering
      *
      * @return array|string
      */
-    public static function HEXTOBIN(mixed $x, mixed $places = null)
+    public static function HEXTOBIN($x, $places = null)
     {
         return Engineering\ConvertHex::toBinary($x, $places);
     }
@@ -372,7 +401,7 @@ class Engineering
      *
      * @return array|string
      */
-    public static function HEXTODEC(mixed $x)
+    public static function HEXTODEC($x)
     {
         return Engineering\ConvertHex::toDecimal($x);
     }
@@ -412,7 +441,7 @@ class Engineering
      *
      * @return array|string
      */
-    public static function HEXTOOCT(mixed $x, mixed $places = null)
+    public static function HEXTOOCT($x, $places = null)
     {
         return Engineering\ConvertHex::toOctal($x, $places);
     }
@@ -454,7 +483,7 @@ class Engineering
      *
      * @return array|string
      */
-    public static function OCTTOBIN(mixed $x, mixed $places = null)
+    public static function OCTTOBIN($x, $places = null)
     {
         return Engineering\ConvertOctal::toBinary($x, $places);
     }
@@ -481,7 +510,7 @@ class Engineering
      *
      * @return array|string
      */
-    public static function OCTTODEC(mixed $x)
+    public static function OCTTODEC($x)
     {
         return Engineering\ConvertOctal::toDecimal($x);
     }
@@ -515,8 +544,10 @@ class Engineering
      *                                    If places is not an integer, it is truncated.
      *                                    If places is nonnumeric, OCT2HEX returns the #VALUE! error value.
      *                                    If places is negative, OCT2HEX returns the #NUM! error value.
+     *
+     * @return array|string
      */
-    public static function OCTTOHEX(mixed $x, mixed $places = null): string|array
+    public static function OCTTOHEX($x, $places = null)
     {
         return Engineering\ConvertOctal::toHex($x, $places);
     }
@@ -559,8 +590,10 @@ class Engineering
      *
      * @param string $complexNumber the complex number for which you want the imaginary
      *                                         coefficient
+     *
+     * @return array|float|string
      */
-    public static function IMAGINARY($complexNumber): string|float|array
+    public static function IMAGINARY($complexNumber)
     {
         return Engineering\Complex::IMAGINARY($complexNumber);
     }
@@ -578,8 +611,10 @@ class Engineering
      * @see Engineering\Complex::IMREAL()
      *
      * @param string $complexNumber the complex number for which you want the real coefficient
+     *
+     * @return array|float|string
      */
-    public static function IMREAL($complexNumber): string|float|array
+    public static function IMREAL($complexNumber)
     {
         return Engineering\Complex::IMREAL($complexNumber);
     }
@@ -1042,8 +1077,10 @@ class Engineering
      * @see ComplexOperations::IMSUM()
      *
      * @param string ...$complexNumbers Series of complex numbers to add
+     *
+     * @return string
      */
-    public static function IMSUM(...$complexNumbers): string
+    public static function IMSUM(...$complexNumbers)
     {
         return ComplexOperations::IMSUM(...$complexNumbers);
     }
@@ -1061,8 +1098,10 @@ class Engineering
      * @see ComplexOperations::IMPRODUCT()
      *
      * @param string ...$complexNumbers Series of complex numbers to multiply
+     *
+     * @return string
      */
-    public static function IMPRODUCT(...$complexNumbers): string
+    public static function IMPRODUCT(...$complexNumbers)
     {
         return ComplexOperations::IMPRODUCT(...$complexNumbers);
     }
@@ -1246,8 +1285,10 @@ class Engineering
      * @param float $lower lower bound for integrating ERF
      * @param float $upper upper bound for integrating ERF.
      *                                If omitted, ERF integrates between zero and lower_limit
+     *
+     * @return array|float|string
      */
-    public static function ERF($lower, $upper = null): float|string|array
+    public static function ERF($lower, $upper = null)
     {
         return Engineering\Erf::ERF($lower, $upper);
     }
@@ -1306,8 +1347,10 @@ class Engineering
      * @deprecated 1.16.0
      *      Use the getConversionCategories() method in the Engineering\ConvertUOM class instead
      * @see Engineering\ConvertUOM::getConversionCategories()
+     *
+     * @return array
      */
-    public static function getConversionGroups(): array
+    public static function getConversionGroups()
     {
         return Engineering\ConvertUOM::getConversionCategories();
     }
@@ -1321,8 +1364,10 @@ class Engineering
      * @see Engineering\ConvertUOM::getConversionCategoryUnits()
      *
      * @param null|mixed $category
+     *
+     * @return array
      */
-    public static function getConversionGroupUnits($category = null): array
+    public static function getConversionGroupUnits($category = null)
     {
         return Engineering\ConvertUOM::getConversionCategoryUnits($category);
     }
@@ -1335,8 +1380,10 @@ class Engineering
      * @see Engineering\ConvertUOM::getConversionCategoryUnitDetails()
      *
      * @param null|mixed $category
+     *
+     * @return array
      */
-    public static function getConversionGroupUnitDetails($category = null): array
+    public static function getConversionGroupUnitDetails($category = null)
     {
         return Engineering\ConvertUOM::getConversionCategoryUnitDetails($category);
     }

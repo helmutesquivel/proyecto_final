@@ -4,7 +4,7 @@ use Controller\MunicipioController;
 
 $direccion = new DireccionController();
 $municipio = new MunicipioController();
-
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 ?>
 
 <h1>Crear Direccion</h1>
@@ -49,7 +49,7 @@ $municipio = new MunicipioController();
                     Error
                  </div>";
         }
-        //}//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
+        }//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
         ?>
     </form>
 </div>

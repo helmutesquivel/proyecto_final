@@ -140,13 +140,13 @@ class DataValidation
     /**
      * Set Formula 1.
      *
-     * @param float|int|string $formula usually string, but can be number (test for equal)
+     * @param string $formula
      *
      * @return $this
      */
-    public function setFormula1($formula): static
+    public function setFormula1($formula)
     {
-        $this->formula1 = (string) $formula;
+        $this->formula1 = $formula;
 
         return $this;
     }
@@ -164,13 +164,13 @@ class DataValidation
     /**
      * Set Formula 2.
      *
-     * @param float|int|string $formula usually string, but can be number (test for equal)
+     * @param string $formula
      *
      * @return $this
      */
-    public function setFormula2($formula): static
+    public function setFormula2($formula)
     {
-        $this->formula2 = (string) $formula;
+        $this->formula2 = $formula;
 
         return $this;
     }
@@ -192,7 +192,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setType($type): static
+    public function setType($type)
     {
         $this->type = $type;
 
@@ -216,7 +216,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setErrorStyle($errorStyle): static
+    public function setErrorStyle($errorStyle)
     {
         $this->errorStyle = $errorStyle;
 
@@ -240,7 +240,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setOperator($operator): static
+    public function setOperator($operator)
     {
         $this->operator = $operator;
 
@@ -264,7 +264,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setAllowBlank($allowBlank): static
+    public function setAllowBlank($allowBlank)
     {
         $this->allowBlank = $allowBlank;
 
@@ -288,7 +288,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setShowDropDown($showDropDown): static
+    public function setShowDropDown($showDropDown)
     {
         $this->showDropDown = $showDropDown;
 
@@ -312,7 +312,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setShowInputMessage($showInputMessage): static
+    public function setShowInputMessage($showInputMessage)
     {
         $this->showInputMessage = $showInputMessage;
 
@@ -336,7 +336,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setShowErrorMessage($showErrorMessage): static
+    public function setShowErrorMessage($showErrorMessage)
     {
         $this->showErrorMessage = $showErrorMessage;
 
@@ -360,7 +360,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setErrorTitle($errorTitle): static
+    public function setErrorTitle($errorTitle)
     {
         $this->errorTitle = $errorTitle;
 
@@ -384,7 +384,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setError($error): static
+    public function setError($error)
     {
         $this->error = $error;
 
@@ -408,7 +408,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setPromptTitle($promptTitle): static
+    public function setPromptTitle($promptTitle)
     {
         $this->promptTitle = $promptTitle;
 
@@ -432,7 +432,7 @@ class DataValidation
      *
      * @return $this
      */
-    public function setPrompt($prompt): static
+    public function setPrompt($prompt)
     {
         $this->prompt = $prompt;
 
@@ -444,24 +444,24 @@ class DataValidation
      *
      * @return string Hash code
      */
-    public function getHashCode(): string
+    public function getHashCode()
     {
         return md5(
-            $this->formula1
-            . $this->formula2
-            . $this->type
-            . $this->errorStyle
-            . $this->operator
-            . ($this->allowBlank ? 't' : 'f')
-            . ($this->showDropDown ? 't' : 'f')
-            . ($this->showInputMessage ? 't' : 'f')
-            . ($this->showErrorMessage ? 't' : 'f')
-            . $this->errorTitle
-            . $this->error
-            . $this->promptTitle
-            . $this->prompt
-            . $this->sqref
-            . __CLASS__
+            $this->formula1 .
+            $this->formula2 .
+            $this->type .
+            $this->errorStyle .
+            $this->operator .
+            ($this->allowBlank ? 't' : 'f') .
+            ($this->showDropDown ? 't' : 'f') .
+            ($this->showInputMessage ? 't' : 'f') .
+            ($this->showErrorMessage ? 't' : 'f') .
+            $this->errorTitle .
+            $this->error .
+            $this->promptTitle .
+            $this->prompt .
+            $this->sqref .
+            __CLASS__
         );
     }
 
@@ -480,7 +480,8 @@ class DataValidation
         }
     }
 
-    private ?string $sqref = null;
+    /** @var ?string */
+    private $sqref;
 
     public function getSqref(): ?string
     {

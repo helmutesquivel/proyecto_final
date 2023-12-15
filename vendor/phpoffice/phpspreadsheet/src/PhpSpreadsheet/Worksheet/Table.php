@@ -9,14 +9,15 @@ use PhpOffice\PhpSpreadsheet\Exception as PhpSpreadsheetException;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
-use Stringable;
 
-class Table implements Stringable
+class Table
 {
     /**
      * Table Name.
+     *
+     * @var string
      */
-    private string $name;
+    private $name;
 
     /**
      * Show Header Row.
@@ -34,13 +35,17 @@ class Table implements Stringable
 
     /**
      * Table Range.
+     *
+     * @var string
      */
-    private string $range = '';
+    private $range = '';
 
     /**
      * Table Worksheet.
+     *
+     * @var null|Worksheet
      */
-    private ?Worksheet $workSheet = null;
+    private $workSheet;
 
     /**
      * Table allow filter.
@@ -58,18 +63,22 @@ class Table implements Stringable
 
     /**
      * Table Style.
+     *
+     * @var TableStyle
      */
-    private TableStyle $style;
+    private $style;
 
     /**
      * Table AutoFilter.
+     *
+     * @var AutoFilter
      */
-    private AutoFilter $autoFilter;
+    private $autoFilter;
 
     /**
      * Create a new Table.
      *
-     * @param AddressRange|array{0: int, 1: int, 2: int, 3: int}|array{0: int, 1: int}|string $range
+     * @param AddressRange|array<int>|string $range
      *            A simple string containing a Cell range like 'A1:E10' is permitted
      *              or passing in an array of [$fromColumnIndex, $fromRow, $toColumnIndex, $toRow] (e.g. [3, 5, 6, 8]),
      *              or an AddressRange object.
@@ -81,14 +90,6 @@ class Table implements Stringable
         $this->autoFilter = new AutoFilter($range);
         $this->setRange($range);
         $this->setName($name);
-    }
-
-    /**
-     * Code to execute when this table is unset().
-     */
-    public function __destruct()
-    {
-        $this->workSheet = null;
     }
 
     /**
@@ -117,8 +118,8 @@ class Table implements Stringable
             }
             // Check for A1 or R1C1 cell reference notation
             if (
-                preg_match(Coordinate::A1_COORDINATE_REGEX, $name)
-                || preg_match('/^R\[?\-?[0-9]*\]?C\[?\-?[0-9]*\]?$/i', $name)
+                preg_match(Coordinate::A1_COORDINATE_REGEX, $name) ||
+                preg_match('/^R\[?\-?[0-9]*\]?C\[?\-?[0-9]*\]?$/i', $name)
             ) {
                 throw new PhpSpreadsheetException('The table name can\'t be the same as a cell reference');
             }
@@ -161,7 +162,7 @@ class Table implements Stringable
 
     private function updateStructuredReferences(string $name): void
     {
-        if (!$this->workSheet || !$this->name) {
+        if ($this->workSheet === null || $this->name === null || $this->name === '') {
             return;
         }
 
@@ -179,7 +180,7 @@ class Table implements Stringable
 
     private function updateStructuredReferencesInCells(Worksheet $worksheet, string $newName): void
     {
-        $pattern = '/' . preg_quote($this->name, '/') . '\[/mui';
+        $pattern = '/' . preg_quote($this->name) . '\[/mui';
 
         foreach ($worksheet->getCoordinates(false) as $coordinate) {
             $cell = $worksheet->getCell($coordinate);
@@ -195,7 +196,7 @@ class Table implements Stringable
 
     private function updateStructuredReferencesInNamedFormulae(Spreadsheet $spreadsheet, string $newName): void
     {
-        $pattern = '/' . preg_quote($this->name, '/') . '\[/mui';
+        $pattern = '/' . preg_quote($this->name) . '\[/mui';
 
         foreach ($spreadsheet->getNamedFormulae() as $namedFormula) {
             $formula = $namedFormula->getValue();
@@ -273,7 +274,7 @@ class Table implements Stringable
     /**
      * Set Table Cell Range.
      *
-     * @param AddressRange|array{0: int, 1: int, 2: int, 3: int}|array{0: int, 1: int}|string $range
+     * @param AddressRange|array<int>|string $range
      *            A simple string containing a Cell range like 'A1:E10' is permitted
      *              or passing in an array of [$fromColumnIndex, $fromRow, $toColumnIndex, $toRow] (e.g. [3, 5, 6, 8]),
      *              or an AddressRange object.
@@ -292,7 +293,7 @@ class Table implements Stringable
             return $this;
         }
 
-        if (!str_contains($range, ':')) {
+        if (strpos($range, ':') === false) {
             throw new PhpSpreadsheetException('Table must be set on a range of cells.');
         }
 
@@ -403,7 +404,7 @@ class Table implements Stringable
      *
      * @return int The offset of the specified column within the table range
      */
-    public function getColumnOffset(string $column): int
+    public function getColumnOffset($column): int
     {
         return $this->isColumnInRange($column);
     }
@@ -577,7 +578,7 @@ class Table implements Stringable
      * toString method replicates previous behavior by returning the range if object is
      * referenced as a property of its worksheet.
      */
-    public function __toString(): string
+    public function __toString()
     {
         return (string) $this->range;
     }

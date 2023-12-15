@@ -77,21 +77,21 @@ class DataSeries
      *
      * @var int[]
      */
-    private array $plotOrder;
+    private $plotOrder = [];
 
     /**
      * Plot Label.
      *
      * @var DataSeriesValues[]
      */
-    private array $plotLabel;
+    private $plotLabel = [];
 
     /**
      * Plot Category.
      *
      * @var DataSeriesValues[]
      */
-    private array $plotCategory;
+    private $plotCategory = [];
 
     /**
      * Smooth Line. Must be specified for both DataSeries and DataSeriesValues.
@@ -105,7 +105,7 @@ class DataSeries
      *
      * @var DataSeriesValues[]
      */
-    private array $plotValues;
+    private $plotValues = [];
 
     /**
      * Plot Bubble Sizes.
@@ -124,7 +124,7 @@ class DataSeries
      * @param DataSeriesValues[] $plotCategory
      * @param DataSeriesValues[] $plotValues
      * @param null|string $plotDirection
-     * @param null|bool $smoothLine null treated as false
+     * @param bool $smoothLine
      * @param null|string $plotStyle
      */
     public function __construct($plotType = null, $plotGrouping = null, array $plotOrder = [], array $plotLabel = [], array $plotCategory = [], array $plotValues = [], $plotDirection = null, $smoothLine = false, $plotStyle = null)
@@ -144,7 +144,7 @@ class DataSeries
         }
         $this->plotCategory = $plotCategory;
 
-        $this->smoothLine = (bool) $smoothLine;
+        $this->smoothLine = $smoothLine;
         $this->plotStyle = $plotStyle;
 
         if ($plotDirection === null) {
@@ -170,7 +170,7 @@ class DataSeries
      *
      * @return $this
      */
-    public function setPlotType($plotType): static
+    public function setPlotType($plotType)
     {
         $this->plotType = $plotType;
 
@@ -194,7 +194,7 @@ class DataSeries
      *
      * @return $this
      */
-    public function setPlotGrouping($groupingType): static
+    public function setPlotGrouping($groupingType)
     {
         $this->plotGrouping = $groupingType;
 
@@ -218,7 +218,7 @@ class DataSeries
      *
      * @return $this
      */
-    public function setPlotDirection($plotDirection): static
+    public function setPlotDirection($plotDirection)
     {
         $this->plotDirection = $plotDirection;
 
@@ -248,9 +248,11 @@ class DataSeries
     /**
      * Get Plot Label by Index.
      *
+     * @param mixed $index
+     *
      * @return DataSeriesValues|false
      */
-    public function getPlotLabelByIndex(mixed $index)
+    public function getPlotLabelByIndex($index)
     {
         $keys = array_keys($this->plotLabel);
         if (in_array($index, $keys)) {
@@ -273,9 +275,11 @@ class DataSeries
     /**
      * Get Plot Category by Index.
      *
+     * @param mixed $index
+     *
      * @return DataSeriesValues|false
      */
-    public function getPlotCategoryByIndex(mixed $index)
+    public function getPlotCategoryByIndex($index)
     {
         $keys = array_keys($this->plotCategory);
         if (in_array($index, $keys)) {
@@ -304,7 +308,7 @@ class DataSeries
      *
      * @return $this
      */
-    public function setPlotStyle($plotStyle): static
+    public function setPlotStyle($plotStyle)
     {
         $this->plotStyle = $plotStyle;
 
@@ -324,9 +328,11 @@ class DataSeries
     /**
      * Get Plot Values by Index.
      *
+     * @param mixed $index
+     *
      * @return DataSeriesValues|false
      */
-    public function getPlotValuesByIndex(mixed $index)
+    public function getPlotValuesByIndex($index)
     {
         $keys = array_keys($this->plotValues);
         if (in_array($index, $keys)) {
@@ -360,8 +366,10 @@ class DataSeries
 
     /**
      * Get Number of Plot Series.
+     *
+     * @return int
      */
-    public function getPlotSeriesCount(): int
+    public function getPlotSeriesCount()
     {
         return count($this->plotValues);
     }
@@ -383,7 +391,7 @@ class DataSeries
      *
      * @return $this
      */
-    public function setSmoothLine($smoothLine): static
+    public function setSmoothLine($smoothLine)
     {
         $this->smoothLine = $smoothLine;
 

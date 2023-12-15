@@ -6,7 +6,10 @@ use PhpOffice\PhpSpreadsheet\Calculation\Exception;
 
 class BranchPruner
 {
-    protected bool $branchPruningEnabled;
+    /**
+     * @var bool
+     */
+    protected $branchPruningEnabled = true;
 
     /**
      * Used to generate unique store keys.
@@ -47,11 +50,20 @@ class BranchPruner
      */
     protected $braceDepthMap = [];
 
-    protected ?string $currentCondition = null;
+    /**
+     * @var null|string
+     */
+    protected $currentCondition;
 
-    protected ?string $currentOnlyIf = null;
+    /**
+     * @var null|string
+     */
+    protected $currentOnlyIf;
 
-    protected ?string $currentOnlyIfNot = null;
+    /**
+     * @var null|string
+     */
+    protected $currentOnlyIfNot;
 
     /**
      * @var null|string
@@ -163,7 +175,10 @@ class BranchPruner
         }
     }
 
-    public function closingBrace(mixed $value): void
+    /**
+     * @param mixed $value
+     */
+    public function closingBrace($value): void
     {
         if (!empty($this->pendingStoreKey) && $this->braceDepthMap[$this->pendingStoreKey] === -1) {
             // we are closing an IF(

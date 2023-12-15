@@ -4,7 +4,7 @@ use Controller\DepartamentoController;
 
 $municipio = new MunicipioController();
 $departamento = new DepartamentoController();
-
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 ?>
 
 <h1>Crear Municipio</h1>
@@ -48,7 +48,7 @@ $departamento = new DepartamentoController();
                     Error
                  </div>";
         }
-        //}//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
+        }//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
         ?>
     </form>
 </div>

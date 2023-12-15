@@ -2,8 +2,6 @@
 
 namespace PhpOffice\PhpSpreadsheet\Reader;
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-
 interface IReader
 {
     public const LOAD_WITH_CHARTS = 1;
@@ -139,7 +137,7 @@ interface IReader
      *            self::SKIP_EMPTY_CELLS    Don't read empty cells (cells that contain a null value,
      *                                      empty string, or a string containing only whitespace characters)
      *
-     * @return Spreadsheet
+     * @return \PhpOffice\PhpSpreadsheet\Spreadsheet
      */
     public function load(string $filename, int $flags = 0);
 }

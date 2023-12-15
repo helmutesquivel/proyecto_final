@@ -59,4 +59,3 @@ $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 
 /*$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 $writer->save('output.xlsx'); */
-?>

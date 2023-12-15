@@ -174,7 +174,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setOddHeader($oddHeader): static
+    public function setOddHeader($oddHeader)
     {
         $this->oddHeader = $oddHeader;
 
@@ -198,7 +198,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setOddFooter($oddFooter): static
+    public function setOddFooter($oddFooter)
     {
         $this->oddFooter = $oddFooter;
 
@@ -222,7 +222,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setEvenHeader($eventHeader): static
+    public function setEvenHeader($eventHeader)
     {
         $this->evenHeader = $eventHeader;
 
@@ -246,7 +246,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setEvenFooter($evenFooter): static
+    public function setEvenFooter($evenFooter)
     {
         $this->evenFooter = $evenFooter;
 
@@ -270,7 +270,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setFirstHeader($firstHeader): static
+    public function setFirstHeader($firstHeader)
     {
         $this->firstHeader = $firstHeader;
 
@@ -294,7 +294,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setFirstFooter($firstFooter): static
+    public function setFirstFooter($firstFooter)
     {
         $this->firstFooter = $firstFooter;
 
@@ -318,7 +318,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setDifferentOddEven($differentOddEvent): static
+    public function setDifferentOddEven($differentOddEvent)
     {
         $this->differentOddEven = $differentOddEvent;
 
@@ -342,7 +342,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setDifferentFirst($differentFirst): static
+    public function setDifferentFirst($differentFirst)
     {
         $this->differentFirst = $differentFirst;
 
@@ -366,7 +366,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setScaleWithDocument($scaleWithDocument): static
+    public function setScaleWithDocument($scaleWithDocument)
     {
         $this->scaleWithDocument = $scaleWithDocument;
 
@@ -390,7 +390,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setAlignWithMargins($alignWithMargins): static
+    public function setAlignWithMargins($alignWithMargins)
     {
         $this->alignWithMargins = $alignWithMargins;
 
@@ -404,7 +404,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function addImage(HeaderFooterDrawing $image, $location = self::IMAGE_HEADER_LEFT): static
+    public function addImage(HeaderFooterDrawing $image, $location = self::IMAGE_HEADER_LEFT)
     {
         $this->headerFooterImages[$location] = $image;
 
@@ -418,7 +418,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function removeImage($location = self::IMAGE_HEADER_LEFT): static
+    public function removeImage($location = self::IMAGE_HEADER_LEFT)
     {
         if (isset($this->headerFooterImages[$location])) {
             unset($this->headerFooterImages[$location]);
@@ -434,7 +434,7 @@ class HeaderFooter
      *
      * @return $this
      */
-    public function setImages(array $images): static
+    public function setImages(array $images)
     {
         $this->headerFooterImages = $images;
 
@@ -446,7 +446,7 @@ class HeaderFooter
      *
      * @return HeaderFooterDrawing[]
      */
-    public function getImages(): array
+    public function getImages()
     {
         // Sort array
         $images = [];

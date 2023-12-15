@@ -19,7 +19,7 @@ class PowerBestFit extends BestFit
      *
      * @return float Y-Value
      */
-    public function getValueOfYForX($xValue): float
+    public function getValueOfYForX($xValue)
     {
         return $this->getIntersect() * ($xValue - $this->xOffset) ** $this->getSlope();
     }
@@ -31,7 +31,7 @@ class PowerBestFit extends BestFit
      *
      * @return float X-Value
      */
-    public function getValueOfXForY($yValue): float
+    public function getValueOfXForY($yValue)
     {
         return (($yValue + $this->yOffset) / $this->getIntersect()) ** (1 / $this->getSlope());
     }
@@ -40,8 +40,10 @@ class PowerBestFit extends BestFit
      * Return the Equation of the best-fit line.
      *
      * @param int $dp Number of places of decimal precision to display
+     *
+     * @return string
      */
-    public function getEquation($dp = 0): string
+    public function getEquation($dp = 0)
     {
         $slope = $this->getSlope($dp);
         $intersect = $this->getIntersect($dp);
@@ -53,8 +55,10 @@ class PowerBestFit extends BestFit
      * Return the Value of X where it intersects Y = 0.
      *
      * @param int $dp Number of places of decimal precision to display
+     *
+     * @return float
      */
-    public function getIntersect($dp = 0): float
+    public function getIntersect($dp = 0)
     {
         if ($dp != 0) {
             return round(exp($this->intersect), $dp);
@@ -72,11 +76,15 @@ class PowerBestFit extends BestFit
     private function powerRegression(array $yValues, array $xValues, bool $const): void
     {
         $adjustedYValues = array_map(
-            fn ($value): float => ($value < 0.0) ? 0 - log(abs($value)) : log($value),
+            function ($value) {
+                return ($value < 0.0) ? 0 - log(abs($value)) : log($value);
+            },
             $yValues
         );
         $adjustedXValues = array_map(
-            fn ($value): float => ($value < 0.0) ? 0 - log(abs($value)) : log($value),
+            function ($value) {
+                return ($value < 0.0) ? 0 - log(abs($value)) : log($value);
+            },
             $xValues
         );
 

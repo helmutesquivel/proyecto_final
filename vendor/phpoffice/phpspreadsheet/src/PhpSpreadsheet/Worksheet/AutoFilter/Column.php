@@ -48,8 +48,10 @@ class Column
 
     /**
      * Autofilter.
+     *
+     * @var null|AutoFilter
      */
-    private ?AutoFilter $parent;
+    private $parent;
 
     /**
      * Autofilter Column Index.
@@ -122,7 +124,7 @@ class Column
      *
      * @return $this
      */
-    public function setColumnIndex($column): static
+    public function setColumnIndex($column)
     {
         $this->setEvaluatedFalse();
         // Uppercase coordinate
@@ -151,7 +153,7 @@ class Column
      *
      * @return $this
      */
-    public function setParent(?AutoFilter $parent = null): static
+    public function setParent(?AutoFilter $parent = null)
     {
         $this->setEvaluatedFalse();
         $this->parent = $parent;
@@ -176,7 +178,7 @@ class Column
      *
      * @return $this
      */
-    public function setFilterType($filterType): static
+    public function setFilterType($filterType)
     {
         $this->setEvaluatedFalse();
         if (!in_array($filterType, self::$filterTypes)) {
@@ -208,7 +210,7 @@ class Column
      *
      * @return $this
      */
-    public function setJoin($join): static
+    public function setJoin($join)
     {
         $this->setEvaluatedFalse();
         // Lowercase And/Or
@@ -229,7 +231,7 @@ class Column
      *
      * @return $this
      */
-    public function setAttributes($attributes): static
+    public function setAttributes($attributes)
     {
         $this->setEvaluatedFalse();
         $this->attributes = $attributes;
@@ -245,7 +247,7 @@ class Column
      *
      * @return $this
      */
-    public function setAttribute($name, $value): static
+    public function setAttribute($name, $value)
     {
         $this->setEvaluatedFalse();
         $this->attributes[$name] = $value;
@@ -312,8 +314,10 @@ class Column
 
     /**
      * Create a new AutoFilter Column Rule in the ruleset.
+     *
+     * @return Column\Rule
      */
-    public function createRule(): Column\Rule
+    public function createRule()
     {
         $this->setEvaluatedFalse();
         if ($this->filterType === self::AUTOFILTER_FILTERTYPE_CUSTOMFILTER && count($this->ruleset) >= 2) {
@@ -329,7 +333,7 @@ class Column
      *
      * @return $this
      */
-    public function addRule(Column\Rule $rule): static
+    public function addRule(Column\Rule $rule)
     {
         $this->setEvaluatedFalse();
         $rule->setParent($this);
@@ -346,7 +350,7 @@ class Column
      *
      * @return $this
      */
-    public function deleteRule($index): static
+    public function deleteRule($index)
     {
         $this->setEvaluatedFalse();
         if (isset($this->ruleset[$index])) {
@@ -365,7 +369,7 @@ class Column
      *
      * @return $this
      */
-    public function clearRules(): static
+    public function clearRules()
     {
         $this->setEvaluatedFalse();
         $this->ruleset = [];

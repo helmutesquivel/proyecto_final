@@ -31,20 +31,15 @@ class TimeValue
      *                                    Date information in time_text is ignored.
      *                         Or can be an array of date/time values
      *
-     * @return array|Datetime|float|int|string Excel date/time serial value, PHP date/time serial value or PHP date/time object,
+     * @return mixed Excel date/time serial value, PHP date/time serial value or PHP date/time object,
      *                        depending on the value of the ReturnDateType flag
      *         If an array of numbers is passed as the argument, then the returned result will also be an array
      *            with the same dimensions
      */
-    public static function fromString($timeValue): array|string|Datetime|int|float
+    public static function fromString($timeValue)
     {
         if (is_array($timeValue)) {
             return self::evaluateSingleArgumentArray([self::class, __FUNCTION__], $timeValue);
-        }
-
-        // try to parse as time iff there is at least one digit
-        if (is_string($timeValue) && preg_match('/\\d/', $timeValue) !== 1) {
-            return ExcelError::VALUE();
         }
 
         $timeValue = trim($timeValue ?? '', '"');

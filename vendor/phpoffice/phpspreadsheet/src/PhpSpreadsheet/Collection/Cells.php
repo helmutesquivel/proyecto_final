@@ -14,7 +14,10 @@ class Cells
 {
     protected const MAX_COLUMN_ID = 16384;
 
-    private CacheInterface $cache;
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
 
     /**
      * Parent worksheet.
@@ -54,8 +57,10 @@ class Cells
 
     /**
      * Prefix used to uniquely identify cache data for this worksheet.
+     *
+     * @var string
      */
-    private string $cachePrefix;
+    private $cachePrefix;
 
     /**
      * Initialise this new cell collection.
@@ -107,7 +112,7 @@ class Cells
      *
      * @param string $cellCoordinate Coordinate of the cell to delete
      */
-    public function delete(string $cellCoordinate): void
+    public function delete($cellCoordinate): void
     {
         if ($cellCoordinate === $this->currentCoordinate && $this->currentCell !== null) {
             $this->currentCell->detach();
@@ -127,7 +132,7 @@ class Cells
      *
      * @return string[]
      */
-    public function getCoordinates(): array
+    public function getCoordinates()
     {
         return array_keys($this->index);
     }
@@ -137,7 +142,7 @@ class Cells
      *
      * @return string[]
      */
-    public function getSortedCoordinates(): array
+    public function getSortedCoordinates()
     {
         asort($this->index);
 
@@ -183,7 +188,7 @@ class Cells
      *
      * @return array Highest column name and highest row number
      */
-    public function getHighestRowAndColumn(): array
+    public function getHighestRowAndColumn()
     {
         // Lookup highest column and highest row
         $maxRow = $maxColumn = 1;
@@ -265,7 +270,7 @@ class Cells
      *
      * @return string Unique Reference
      */
-    private function getUniqueID(): string
+    private function getUniqueID()
     {
         $cacheType = Settings::getCache();
 
@@ -276,8 +281,10 @@ class Cells
 
     /**
      * Clone the cell collection.
+     *
+     * @return self
      */
-    public function cloneCellCollection(Worksheet $worksheet): static
+    public function cloneCellCollection(Worksheet $worksheet)
     {
         $this->storeCurrentCell();
         $newCollection = clone $this;
@@ -349,7 +356,7 @@ class Cells
     private function storeCurrentCell(): void
     {
         if ($this->currentCellIsDirty && isset($this->currentCoordinate, $this->currentCell)) {
-            $this->currentCell->detach();
+            $this->currentCell->/** @scrutinizer ignore-call */ detach();
 
             $stored = $this->cache->set($this->cachePrefix . $this->currentCoordinate, $this->currentCell);
             if ($stored === false) {
@@ -374,8 +381,10 @@ class Cells
      *
      * @param string $cellCoordinate Coordinate of the cell to update
      * @param Cell $cell Cell to update
+     *
+     * @return Cell
      */
-    public function add($cellCoordinate, Cell $cell): Cell
+    public function add($cellCoordinate, Cell $cell)
     {
         if ($cellCoordinate !== $this->currentCoordinate) {
             $this->storeCurrentCell();
@@ -399,7 +408,7 @@ class Cells
      *
      * @return null|Cell Cell that was found, or null if not found
      */
-    public function get(string $cellCoordinate)
+    public function get($cellCoordinate)
     {
         if ($cellCoordinate === $this->currentCoordinate) {
             return $this->currentCell;
@@ -453,7 +462,6 @@ class Cells
     public function __destruct()
     {
         $this->cache->deleteMultiple($this->getAllCacheKeys());
-        $this->parent = null;
     }
 
     /**

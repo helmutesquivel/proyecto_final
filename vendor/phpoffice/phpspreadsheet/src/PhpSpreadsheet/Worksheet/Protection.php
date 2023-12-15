@@ -19,83 +19,115 @@ class Protection
 
     /**
      * Autofilters are locked when sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $autoFilter = null;
+    private $autoFilter;
 
     /**
      * Deleting columns is locked when sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $deleteColumns = null;
+    private $deleteColumns;
 
     /**
      * Deleting rows is locked when sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $deleteRows = null;
+    private $deleteRows;
 
     /**
      * Formatting cells is locked when sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $formatCells = null;
+    private $formatCells;
 
     /**
      * Formatting columns is locked when sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $formatColumns = null;
+    private $formatColumns;
 
     /**
      * Formatting rows is locked when sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $formatRows = null;
+    private $formatRows;
 
     /**
      * Inserting columns is locked when sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $insertColumns = null;
+    private $insertColumns;
 
     /**
      * Inserting hyperlinks is locked when sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $insertHyperlinks = null;
+    private $insertHyperlinks;
 
     /**
      * Inserting rows is locked when sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $insertRows = null;
+    private $insertRows;
 
     /**
      * Objects are locked when sheet is protected, default false.
+     *
+     * @var ?bool
      */
-    private ?bool $objects = null;
+    private $objects;
 
     /**
      * Pivot tables are locked when the sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $pivotTables = null;
+    private $pivotTables;
 
     /**
      * Scenarios are locked when sheet is protected, default false.
+     *
+     * @var ?bool
      */
-    private ?bool $scenarios = null;
+    private $scenarios;
 
     /**
      * Selection of locked cells is locked when sheet is protected, default false.
+     *
+     * @var ?bool
      */
-    private ?bool $selectLockedCells = null;
+    private $selectLockedCells;
 
     /**
      * Selection of unlocked cells is locked when sheet is protected, default false.
+     *
+     * @var ?bool
      */
-    private ?bool $selectUnlockedCells = null;
+    private $selectUnlockedCells;
 
     /**
      * Sheet is locked when sheet is protected, default false.
+     *
+     * @var ?bool
      */
-    private ?bool $sheet = null;
+    private $sheet;
 
     /**
      * Sorting is locked when sheet is protected, default true.
+     *
+     * @var ?bool
      */
-    private ?bool $sort = null;
+    private $sort;
 
     /**
      * Hashed password.
@@ -106,13 +138,17 @@ class Protection
 
     /**
      * Algorithm name.
+     *
+     * @var string
      */
-    private string $algorithm = '';
+    private $algorithm = '';
 
     /**
      * Salt value.
+     *
+     * @var string
      */
-    private string $salt = '';
+    private $salt = '';
 
     /**
      * Spin count.
@@ -134,23 +170,23 @@ class Protection
     public function isProtectionEnabled(): bool
     {
         return
-            $this->password !== ''
-            || isset($this->sheet)
-            || isset($this->objects)
-            || isset($this->scenarios)
-            || isset($this->formatCells)
-            || isset($this->formatColumns)
-            || isset($this->formatRows)
-            || isset($this->insertColumns)
-            || isset($this->insertRows)
-            || isset($this->insertHyperlinks)
-            || isset($this->deleteColumns)
-            || isset($this->deleteRows)
-            || isset($this->selectLockedCells)
-            || isset($this->sort)
-            || isset($this->autoFilter)
-            || isset($this->pivotTables)
-            || isset($this->selectUnlockedCells);
+            $this->password !== '' ||
+            isset($this->sheet) ||
+            isset($this->objects) ||
+            isset($this->scenarios) ||
+            isset($this->formatCells) ||
+            isset($this->formatColumns) ||
+            isset($this->formatRows) ||
+            isset($this->insertColumns) ||
+            isset($this->insertRows) ||
+            isset($this->insertHyperlinks) ||
+            isset($this->deleteColumns) ||
+            isset($this->deleteRows) ||
+            isset($this->selectLockedCells) ||
+            isset($this->sort) ||
+            isset($this->autoFilter) ||
+            isset($this->pivotTables) ||
+            isset($this->selectUnlockedCells);
     }
 
     public function getSheet(): ?bool
@@ -363,7 +399,7 @@ class Protection
      *
      * @return $this
      */
-    public function setPassword($password, $alreadyHashed = false): static
+    public function setPassword($password, $alreadyHashed = false)
     {
         if (!$alreadyHashed) {
             $salt = $this->generateSalt();

@@ -19,7 +19,10 @@ abstract class WizardAbstract
      */
     protected $expression;
 
-    protected string $cellRange;
+    /**
+     * @var string
+     */
+    protected $cellRange;
 
     /**
      * @var string
@@ -88,12 +91,12 @@ abstract class WizardAbstract
     protected function validateOperand(string $operand, string $operandValueType = Wizard::VALUE_TYPE_LITERAL): string
     {
         if (
-            $operandValueType === Wizard::VALUE_TYPE_LITERAL
-            && str_starts_with($operand, '"')
-            && str_ends_with($operand, '"')
+            $operandValueType === Wizard::VALUE_TYPE_LITERAL &&
+            substr($operand, 0, 1) === '"' &&
+            substr($operand, -1) === '"'
         ) {
             $operand = str_replace('""', '"', substr($operand, 1, -1));
-        } elseif ($operandValueType === Wizard::VALUE_TYPE_FORMULA && str_starts_with($operand, '=')) {
+        } elseif ($operandValueType === Wizard::VALUE_TYPE_FORMULA && substr($operand, 0, 1) === '=') {
             $operand = substr($operand, 1);
         }
 
@@ -106,13 +109,13 @@ abstract class WizardAbstract
         $column = $matches[6];
         $row = $matches[7];
 
-        if (!str_contains($column, '$')) {
+        if (strpos($column, '$') === false) {
             $column = Coordinate::columnIndexFromString($column);
             $column -= $referenceColumn - 1;
             $column = Coordinate::stringFromColumnIndex($column);
         }
 
-        if (!str_contains($row, '$')) {
+        if (strpos($row, '$') === false) {
             $row -= $referenceRow - 1;
         }
 
@@ -133,7 +136,9 @@ abstract class WizardAbstract
             if ($i) {
                 $value = (string) preg_replace_callback(
                     '/' . Calculation::CALCULATION_REGEXP_CELLREF_RELATIVE . '/i',
-                    fn ($matches): string => self::reverseCellAdjustment($matches, $referenceColumnIndex, $referenceRow),
+                    function ($matches) use ($referenceColumnIndex, $referenceRow) {
+                        return self::reverseCellAdjustment($matches, $referenceColumnIndex, $referenceRow);
+                    },
                     $value
                 );
             }
@@ -150,13 +155,13 @@ abstract class WizardAbstract
         $column = $matches[6];
         $row = $matches[7];
 
-        if (!str_contains($column, '$')) {
+        if (strpos($column, '$') === false) {
             $column = Coordinate::columnIndexFromString($column);
             $column += $this->referenceColumn - 1;
             $column = Coordinate::stringFromColumnIndex($column);
         }
 
-        if (!str_contains($row, '$')) {
+        if (strpos($row, '$') === false) {
             $row += $this->referenceRow - 1;
         }
 

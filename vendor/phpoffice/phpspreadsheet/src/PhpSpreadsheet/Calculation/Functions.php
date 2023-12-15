@@ -51,12 +51,12 @@ class Functions
      *
      * @return bool (Success or Failure)
      */
-    public static function setCompatibilityMode($compatibilityMode): bool
+    public static function setCompatibilityMode($compatibilityMode)
     {
         if (
-            ($compatibilityMode == self::COMPATIBILITY_EXCEL)
-            || ($compatibilityMode == self::COMPATIBILITY_GNUMERIC)
-            || ($compatibilityMode == self::COMPATIBILITY_OPENOFFICE)
+            ($compatibilityMode == self::COMPATIBILITY_EXCEL) ||
+            ($compatibilityMode == self::COMPATIBILITY_GNUMERIC) ||
+            ($compatibilityMode == self::COMPATIBILITY_OPENOFFICE)
         ) {
             self::$compatibilityMode = $compatibilityMode;
 
@@ -91,12 +91,12 @@ class Functions
      *
      * @return bool Success or failure
      */
-    public static function setReturnDateType($returnDateType): bool
+    public static function setReturnDateType($returnDateType)
     {
         if (
-            ($returnDateType == self::RETURNDATE_UNIX_TIMESTAMP)
-            || ($returnDateType == self::RETURNDATE_PHP_DATETIME_OBJECT)
-            || ($returnDateType == self::RETURNDATE_EXCEL)
+            ($returnDateType == self::RETURNDATE_UNIX_TIMESTAMP) ||
+            ($returnDateType == self::RETURNDATE_PHP_DATETIME_OBJECT) ||
+            ($returnDateType == self::RETURNDATE_EXCEL)
         ) {
             self::$returnDateType = $returnDateType;
 
@@ -125,31 +125,35 @@ class Functions
      *
      * @return string #Not Yet Implemented
      */
-    public static function DUMMY(): string
+    public static function DUMMY()
     {
         return '#Not Yet Implemented';
     }
 
-    public static function isMatrixValue(mixed $idx): bool
+    /** @param mixed $idx */
+    public static function isMatrixValue($idx): bool
     {
         return (substr_count($idx, '.') <= 1) || (preg_match('/\.[A-Z]/', $idx) > 0);
     }
 
-    public static function isValue(mixed $idx): bool
+    /** @param mixed $idx */
+    public static function isValue($idx): bool
     {
         return substr_count($idx, '.') === 0;
     }
 
-    public static function isCellValue(mixed $idx): bool
+    /** @param mixed $idx */
+    public static function isCellValue($idx): bool
     {
         return substr_count($idx, '.') > 1;
     }
 
-    public static function ifCondition(mixed $condition): string
+    /** @param mixed $condition */
+    public static function ifCondition($condition): string
     {
         $condition = self::flattenSingleValue($condition);
 
-        if ($condition === '' || $condition === null) {
+        if ($condition === '') {
             return '=""';
         }
         if (!is_string($condition) || !in_array($condition[0], ['>', '<', '='], true)) {
@@ -181,9 +185,11 @@ class Functions
     }
 
     /**
+     * @param mixed $operand
+     *
      * @return mixed
      */
-    private static function operandSpecialHandling(mixed $operand)
+    private static function operandSpecialHandling($operand)
     {
         if (is_numeric($operand) || is_bool($operand)) {
             return $operand;
@@ -214,7 +220,7 @@ class Functions
      *
      * @return string #NULL!
      */
-    public static function null(): string
+    public static function null()
     {
         return Information\ExcelError::null();
     }
@@ -229,7 +235,7 @@ class Functions
      *
      * @return string #NUM!
      */
-    public static function NAN(): string
+    public static function NAN()
     {
         return Information\ExcelError::NAN();
     }
@@ -244,7 +250,7 @@ class Functions
      *
      * @return string #REF!
      */
-    public static function REF(): string
+    public static function REF()
     {
         return Information\ExcelError::REF();
     }
@@ -263,7 +269,7 @@ class Functions
      *
      * @return string #N/A!
      */
-    public static function NA(): string
+    public static function NA()
     {
         return Information\ExcelError::NA();
     }
@@ -278,7 +284,7 @@ class Functions
      *
      * @return string #VALUE!
      */
-    public static function VALUE(): string
+    public static function VALUE()
     {
         return Information\ExcelError::VALUE();
     }
@@ -293,7 +299,7 @@ class Functions
      *
      * @return string #NAME?
      */
-    public static function NAME(): string
+    public static function NAME()
     {
         return Information\ExcelError::NAME();
     }
@@ -306,7 +312,7 @@ class Functions
      *
      * @return string #Not Yet Implemented
      */
-    public static function DIV0(): string
+    public static function DIV0()
     {
         return Information\ExcelError::DIV0();
     }
@@ -321,7 +327,7 @@ class Functions
      *
      * @return array|int|string
      */
-    public static function errorType(mixed $value = '')
+    public static function errorType($value = '')
     {
         return Information\ExcelError::type($value);
     }
@@ -336,7 +342,7 @@ class Functions
      *
      * @return array|bool
      */
-    public static function isBlank(mixed $value = null)
+    public static function isBlank($value = null)
     {
         return Information\Value::isBlank($value);
     }
@@ -351,7 +357,7 @@ class Functions
      *
      * @return array|bool
      */
-    public static function isErr(mixed $value = '')
+    public static function isErr($value = '')
     {
         return Information\ErrorValue::isErr($value);
     }
@@ -366,7 +372,7 @@ class Functions
      *
      * @return array|bool
      */
-    public static function isError(mixed $value = '')
+    public static function isError($value = '')
     {
         return Information\ErrorValue::isError($value);
     }
@@ -381,7 +387,7 @@ class Functions
      *
      * @return array|bool
      */
-    public static function isNa(mixed $value = '')
+    public static function isNa($value = '')
     {
         return Information\ErrorValue::isNa($value);
     }
@@ -396,7 +402,7 @@ class Functions
      *
      * @return array|bool|string
      */
-    public static function isEven(mixed $value = null)
+    public static function isEven($value = null)
     {
         return Information\Value::isEven($value);
     }
@@ -411,7 +417,7 @@ class Functions
      *
      * @return array|bool|string
      */
-    public static function isOdd(mixed $value = null)
+    public static function isOdd($value = null)
     {
         return Information\Value::isOdd($value);
     }
@@ -426,7 +432,7 @@ class Functions
      *
      * @return array|bool
      */
-    public static function isNumber(mixed $value = null)
+    public static function isNumber($value = null)
     {
         return Information\Value::isNumber($value);
     }
@@ -438,8 +444,10 @@ class Functions
      *
      * @deprecated 1.23.0 Use the isLogical() method in the Information\Value class instead
      * @see Information\Value::isLogical()
+     *
+     * @return array|bool
      */
-    public static function isLogical(mixed $value = null): bool|array
+    public static function isLogical($value = null)
     {
         return Information\Value::isLogical($value);
     }
@@ -454,7 +462,7 @@ class Functions
      *
      * @return array|bool
      */
-    public static function isText(mixed $value = null)
+    public static function isText($value = null)
     {
         return Information\Value::isText($value);
     }
@@ -469,7 +477,7 @@ class Functions
      *
      * @return array|bool
      */
-    public static function isNonText(mixed $value = null)
+    public static function isNonText($value = null)
     {
         return Information\Value::isNonText($value);
     }
@@ -508,7 +516,7 @@ class Functions
      *
      * @param null|mixed $value The value you want tested
      *
-     * @return int N converts values listed in the following table
+     * @return number N converts values listed in the following table
      *        If value is or refers to N returns
      *        A number            1
      *        Text                2
@@ -516,7 +524,7 @@ class Functions
      *        An error value        16
      *        Array or Matrix        64
      */
-    public static function TYPE($value = null): int
+    public static function TYPE($value = null)
     {
         return Information\Value::type($value);
     }
@@ -528,7 +536,7 @@ class Functions
      *
      * @return array Flattened array
      */
-    public static function flattenArray($array): array
+    public static function flattenArray($array)
     {
         if (!is_array($array)) {
             return (array) $array;
@@ -551,9 +559,11 @@ class Functions
     }
 
     /**
+     * @param mixed $value
+     *
      * @return null|mixed
      */
-    public static function scalar(mixed $value)
+    public static function scalar($value)
     {
         if (!is_array($value)) {
             return $value;
@@ -606,7 +616,7 @@ class Functions
      *
      * @return mixed
      */
-    public static function flattenSingleValue(mixed $value = '')
+    public static function flattenSingleValue($value = '')
     {
         while (is_array($value)) {
             $value = array_shift($value);
@@ -626,7 +636,7 @@ class Functions
      *
      * @return array|bool|string
      */
-    public static function isFormula(mixed $cellReference = '', ?Cell $cell = null)
+    public static function isFormula($cellReference = '', ?Cell $cell = null)
     {
         return Information\Value::isFormula($cellReference, $cell);
     }
@@ -643,8 +653,8 @@ class Functions
         if ($defined !== null) {
             $worksheet2 = $defined->getWorkSheet();
             if (!$defined->isFormula() && $worksheet2 !== null) {
-                $coordinate = "'" . $worksheet2->getTitle() . "'!"
-                    . (string) preg_replace('/^=/', '', str_replace('$', '', $defined->getValue()));
+                $coordinate = "'" . $worksheet2->getTitle() . "'!" .
+                    (string) preg_replace('/^=/', '', str_replace('$', '', $defined->getValue()));
             }
         }
 
@@ -658,7 +668,7 @@ class Functions
 
     public static function trimSheetFromCellReference(string $coordinate): string
     {
-        if (str_contains($coordinate, '!')) {
+        if (strpos($coordinate, '!') !== false) {
             $coordinate = substr($coordinate, strrpos($coordinate, '!') + 1);
         }
 

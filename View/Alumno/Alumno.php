@@ -4,7 +4,7 @@ use Controller\DireccionController;
 
 $alumno = new AlumnoController();
 $direccion = new DireccionController();
-
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 ?>
 
 <h1>Crear Alumno</h1>
@@ -77,7 +77,7 @@ $direccion = new DireccionController();
                     Error
                  </div>";
         }
-        //}//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
+        }//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
         ?>
     </form>
 </div>

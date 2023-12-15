@@ -9,18 +9,24 @@ class Csv extends BaseWriter
 {
     /**
      * PhpSpreadsheet object.
+     *
+     * @var Spreadsheet
      */
-    private Spreadsheet $spreadsheet;
+    private $spreadsheet;
 
     /**
      * Delimiter.
+     *
+     * @var string
      */
-    private string $delimiter = ',';
+    private $delimiter = ',';
 
     /**
      * Enclosure.
+     *
+     * @var string
      */
-    private string $enclosure = '"';
+    private $enclosure = '"';
 
     /**
      * Line ending.
@@ -60,8 +66,10 @@ class Csv extends BaseWriter
 
     /**
      * Output encoding.
+     *
+     * @var string
      */
-    private string $outputEncoding = '';
+    private $outputEncoding = '';
 
     /**
      * Create a new CSV.
@@ -260,8 +268,10 @@ class Csv extends BaseWriter
 
     /**
      * Convert boolean to TRUE/FALSE; otherwise return element cast to string.
+     *
+     * @param mixed $element
      */
-    private static function elementToString(mixed $element): string
+    private static function elementToString($element): string
     {
         if (is_bool($element)) {
             return $element ? 'TRUE' : 'FALSE';
@@ -311,6 +321,6 @@ class Csv extends BaseWriter
         if ($this->outputEncoding != '') {
             $line = mb_convert_encoding($line, $this->outputEncoding);
         }
-        fwrite($fileHandle, $line);
+        fwrite($fileHandle, /** @scrutinizer ignore-type */ $line);
     }
 }

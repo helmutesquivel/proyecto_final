@@ -30,7 +30,7 @@ class ErfC
      *         If an array of numbers is passed as an argument, then the returned result will also be an array
      *            with the same dimensions
      */
-    public static function ERFC(mixed $value)
+    public static function ERFC($value)
     {
         if (is_array($value)) {
             return self::evaluateSingleArgumentArray([self::class, __FUNCTION__], $value);
@@ -52,7 +52,7 @@ class ErfC
      *
      * @return float
      */
-    private static function erfcValue($value): float|int
+    private static function erfcValue($value)
     {
         $value = (float) $value;
         if (abs($value) < 2.2) {

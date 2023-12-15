@@ -20,8 +20,10 @@ abstract class BestFit
 
     /**
      * Number of entries in the sets of x- and y-value arrays.
+     *
+     * @var int
      */
-    protected int $valueCount;
+    protected $valueCount = 0;
 
     /**
      * X-value dataseries of values.
@@ -346,6 +348,18 @@ abstract class BestFit
         return $this->yBestFitValues;
     }
 
+    /** @var mixed */
+    private static $scrutinizerZeroPointZero = 0.0;
+
+    /**
+     * @param mixed $x
+     * @param mixed $y
+     */
+    private static function scrutinizerLooseCompare($x, $y): bool
+    {
+        return $x == $y;
+    }
+
     /**
      * @param float $sumX
      * @param float $sumY
@@ -384,8 +398,8 @@ abstract class BestFit
         } else {
             $this->stdevOfResiduals = sqrt($SSres / $this->DFResiduals);
         }
-
-        if ($SStot == 0.0 || $SSres == $SStot) {
+        // Scrutinizer thinks $SSres == $SStot is always true. It is wrong.
+        if ($SStot == self::$scrutinizerZeroPointZero || self::scrutinizerLooseCompare($SSres, $SStot)) {
             $this->goodnessOfFit = 1;
         } else {
             $this->goodnessOfFit = 1 - ($SSres / $SStot);
@@ -416,7 +430,9 @@ abstract class BestFit
     {
         return array_sum(
             array_map(
-                fn ($value): float|int => $value ** 2,
+                function ($value) {
+                    return $value ** 2;
+                },
                 $values
             )
         );

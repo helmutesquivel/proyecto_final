@@ -2,8 +2,6 @@
 
 namespace PhpOffice\PhpSpreadsheet\RichText;
 
-use PhpOffice\PhpSpreadsheet\Style\Font;
-
 interface ITextElement
 {
     /**
@@ -25,7 +23,7 @@ interface ITextElement
     /**
      * Get font.
      *
-     * @return null|Font
+     * @return null|\PhpOffice\PhpSpreadsheet\Style\Font
      */
     public function getFont();
 

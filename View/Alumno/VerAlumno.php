@@ -2,7 +2,7 @@
 
 use Controller\AlumnoController;
 
-//if(!empty($_SESSION['id'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 
 $alumno = new AlumnoController;
 
@@ -10,7 +10,7 @@ $listado = $alumno->mostrar();
 
 ?>
 <h1>Alumnos</h1>
-<a href='index.php?action=alumnoPdf'><button type="button" class="btn btn-warning">Descargar Pdf</button></a><a href='index.php?action=alumnoExcel'><button type="button" class="btn btn-success">Descargar Excel</button></a>
+<a href='index.php?action=alumnoPdf'><button type="button" class="btn btn-warning mr-4">Descargar Pdf</button></a> <a href='index.php?action=alumnoExcel'><button type="button" class="btn btn-success">Descargar Excel</button></a>
 <table class="table table-hove mt-3">
     <thead>
         <tr class="table-success">
@@ -43,4 +43,4 @@ $listado = $alumno->mostrar();
         <?php endforeach; ?>
     </tbody>
 </table>
-<?php //} ?>
+<?php } ?>

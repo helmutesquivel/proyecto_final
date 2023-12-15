@@ -79,7 +79,7 @@ class SheetView
      *
      * @return $this
      */
-    public function setZoomScale($zoomScale): static
+    public function setZoomScale($zoomScale)
     {
         // Microsoft Office Excel 2007 only allows setting a scale between 10 and 400 via the user interface,
         // but it is apparently still able to handle any scale >= 1
@@ -110,7 +110,7 @@ class SheetView
      *
      * @return $this
      */
-    public function setZoomScaleNormal($zoomScaleNormal): static
+    public function setZoomScaleNormal($zoomScaleNormal)
     {
         if ($zoomScaleNormal === null || $zoomScaleNormal >= 1) {
             $this->zoomScaleNormal = $zoomScaleNormal;
@@ -161,7 +161,7 @@ class SheetView
      *
      * @return $this
      */
-    public function setView($sheetViewType): static
+    public function setView($sheetViewType)
     {
         // MS Excel 2007 allows setting the view to 'normal', 'pageLayout' or 'pageBreakPreview' via the user interface
         if ($sheetViewType === null) {
@@ -174,5 +174,20 @@ class SheetView
         }
 
         return $this;
+    }
+
+    /**
+     * Implement PHP __clone to create a deep clone, not just a shallow copy.
+     */
+    public function __clone()
+    {
+        $vars = get_object_vars($this);
+        foreach ($vars as $key => $value) {
+            if (is_object($value)) {
+                $this->$key = clone $value;
+            } else {
+                $this->$key = $value;
+            }
+        }
     }
 }

@@ -14,33 +14,45 @@ class Borders extends Supervisor
 
     /**
      * Left.
+     *
+     * @var Border
      */
-    protected Border $left;
+    protected $left;
 
     /**
      * Right.
+     *
+     * @var Border
      */
-    protected Border $right;
+    protected $right;
 
     /**
      * Top.
+     *
+     * @var Border
      */
-    protected Border $top;
+    protected $top;
 
     /**
      * Bottom.
+     *
+     * @var Border
      */
-    protected Border $bottom;
+    protected $bottom;
 
     /**
      * Diagonal.
+     *
+     * @var Border
      */
-    protected Border $diagonal;
+    protected $diagonal;
 
     /**
      * DiagonalDirection.
+     *
+     * @var int
      */
-    protected int $diagonalDirection;
+    protected $diagonalDirection;
 
     /**
      * All borders pseudo-border. Only applies to supervisor.
@@ -138,8 +150,10 @@ class Borders extends Supervisor
      * Build style array from subcomponents.
      *
      * @param array $array
+     *
+     * @return array
      */
-    public function getStyleArray($array): array
+    public function getStyleArray($array)
     {
         return ['borders' => $array];
     }
@@ -183,7 +197,7 @@ class Borders extends Supervisor
      *
      * @return $this
      */
-    public function applyFromArray(array $styleArray): static
+    public function applyFromArray(array $styleArray)
     {
         if ($this->isSupervisor) {
             $this->getActiveSheet()->getStyle($this->getSelectedCells())->applyFromArray($this->getStyleArray($styleArray));
@@ -358,7 +372,7 @@ class Borders extends Supervisor
      *
      * @return $this
      */
-    public function setDiagonalDirection($direction): static
+    public function setDiagonalDirection($direction)
     {
         if ($direction == '') {
             $direction = self::DIAGONAL_NONE;
@@ -385,13 +399,13 @@ class Borders extends Supervisor
         }
 
         return md5(
-            $this->getLeft()->getHashCode()
-            . $this->getRight()->getHashCode()
-            . $this->getTop()->getHashCode()
-            . $this->getBottom()->getHashCode()
-            . $this->getDiagonal()->getHashCode()
-            . $this->getDiagonalDirection()
-            . __CLASS__
+            $this->getLeft()->getHashCode() .
+            $this->getRight()->getHashCode() .
+            $this->getTop()->getHashCode() .
+            $this->getBottom()->getHashCode() .
+            $this->getDiagonal()->getHashCode() .
+            $this->getDiagonalDirection() .
+            __CLASS__
         );
     }
 

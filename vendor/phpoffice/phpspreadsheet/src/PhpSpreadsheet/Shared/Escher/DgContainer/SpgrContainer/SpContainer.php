@@ -194,8 +194,9 @@ class SpContainer
      * Set an option for the Shape Group Container.
      *
      * @param int $property The number specifies the option
+     * @param mixed $value
      */
-    public function setOPT($property, mixed $value): void
+    public function setOPT($property, $value): void
     {
         $this->OPT[$property] = $value;
     }
@@ -353,7 +354,7 @@ class SpContainer
      *
      * @return int Nesting level
      */
-    public function getNestingLevel(): int
+    public function getNestingLevel()
     {
         $nestingLevel = 0;
 

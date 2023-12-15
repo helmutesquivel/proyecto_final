@@ -64,7 +64,7 @@ class PolynomialBestFit extends BestFit
      *
      * @return float X-Value
      */
-    public function getValueOfXForY($yValue): int|float
+    public function getValueOfXForY($yValue)
     {
         return ($yValue - $this->getIntersect()) / $this->getSlope();
     }
@@ -73,8 +73,10 @@ class PolynomialBestFit extends BestFit
      * Return the Equation of the best-fit line.
      *
      * @param int $dp Number of places of decimal precision to display
+     *
+     * @return string
      */
-    public function getEquation($dp = 0): string
+    public function getEquation($dp = 0)
     {
         $slope = $this->getSlope($dp);
         $intersect = $this->getIntersect($dp);
@@ -105,6 +107,7 @@ class PolynomialBestFit extends BestFit
     {
         if ($dp != 0) {
             $coefficients = [];
+            // Scrutinizer is correct - $this->slope is float, not array.
             //* @phpstan-ignore-next-line
             foreach ($this->slope as $coefficient) {
                 $coefficients[] = round($coefficient, $dp);
@@ -119,8 +122,10 @@ class PolynomialBestFit extends BestFit
 
     /**
      * @param int $dp
+     *
+     * @return array
      */
-    public function getCoefficients($dp = 0): array
+    public function getCoefficients($dp = 0)
     {
         // Phpstan and Scrutinizer are both correct - getSlope returns float, not array.
         // @phpstan-ignore-next-line
@@ -134,7 +139,7 @@ class PolynomialBestFit extends BestFit
      * @param float[] $yValues The set of Y-values for this regression
      * @param float[] $xValues The set of X-values for this regression
      */
-    private function polynomialRegression($order, array $yValues, array $xValues): void
+    private function polynomialRegression($order, $yValues, $xValues): void
     {
         // calculate sums
         $x_sum = array_sum($xValues);
@@ -177,7 +182,7 @@ class PolynomialBestFit extends BestFit
         }
 
         $this->intersect = array_shift($coefficients);
-        // Phpstan is correct
+        // Phpstan (and maybe Scrutinizer) are correct
         //* @phpstan-ignore-next-line
         $this->slope = $coefficients;
 

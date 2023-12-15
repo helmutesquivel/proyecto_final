@@ -4,7 +4,7 @@ use Controller\DepartamentoController;
 
 $departamento = new DepartamentoController();
 
-// if(!empty($_SESSION['id'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 
 ?>
 
@@ -36,7 +36,7 @@ $departamento = new DepartamentoController();
                     Error
                  </div>";
     }
-    //}//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
+    }//CIERRE DE VALIDACION, INICIO SESION OBLIGADO
     ?>
     </form>
     

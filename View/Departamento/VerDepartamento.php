@@ -2,7 +2,7 @@
 
 use Controller\DepartamentoController;
 
-//if(!empty($_SESSION['id'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 
 $departamento = new DepartamentoController;
 
@@ -32,4 +32,4 @@ $listado = $departamento->mostrar();
         <?php endforeach; ?>
     </tbody>
 </table>
-<?php //} ?>
+<?php } ?>

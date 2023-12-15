@@ -25,7 +25,7 @@ class Trends
      * @param mixed $array1 should be array, but scalar is made into one
      * @param mixed $array2 should be array, but scalar is made into one
      */
-    private static function checkTrendArrays(mixed &$array1, mixed &$array2): void
+    private static function checkTrendArrays(&$array1, &$array2): void
     {
         if (!is_array($array1)) {
             $array1 = [$array1];
@@ -67,7 +67,7 @@ class Trends
      *
      * @return float|string
      */
-    public static function CORREL(mixed $yValues, $xValues = null)
+    public static function CORREL($yValues, $xValues = null)
     {
         if (($xValues === null) || (!is_array($yValues)) || (!is_array($xValues))) {
             return ExcelError::VALUE();
@@ -90,12 +90,12 @@ class Trends
      *
      * Returns covariance, the average of the products of deviations for each data point pair.
      *
-     * @param mixed[] $yValues array of mixed Data Series Y
-     * @param mixed[] $xValues array of mixed Data Series X
+     * @param mixed $yValues array of mixed Data Series Y
+     * @param mixed $xValues array of mixed Data Series X
      *
      * @return float|string
      */
-    public static function COVAR(array $yValues, array $xValues)
+    public static function COVAR($yValues, $xValues)
     {
         try {
             self::checkTrendArrays($yValues, $xValues);
@@ -117,14 +117,14 @@ class Trends
      *
      * @param mixed $xValue Float value of X for which we want to find Y
      *                      Or can be an array of values
-     * @param mixed[] $yValues array of mixed Data Series Y
-     * @param mixed[] $xValues array of mixed Data Series X
+     * @param mixed $yValues array of mixed Data Series Y
+     * @param mixed $xValues of mixed Data Series X
      *
      * @return array|bool|float|string
      *         If an array of numbers is passed as an argument, then the returned result will also be an array
      *            with the same dimensions
      */
-    public static function FORECAST(mixed $xValue, array $yValues, array $xValues)
+    public static function FORECAST($xValue, $yValues, $xValues)
     {
         if (is_array($xValue)) {
             return self::evaluateArrayArgumentsSubset([self::class, __FUNCTION__], 1, $xValue, $yValues, $xValues);
@@ -155,7 +155,7 @@ class Trends
      *
      * @return float[]
      */
-    public static function GROWTH($yValues, $xValues = [], $newValues = [], mixed $const = true)
+    public static function GROWTH($yValues, $xValues = [], $newValues = [], $const = true)
     {
         $yValues = Functions::flattenArray($yValues);
         $xValues = Functions::flattenArray($xValues);
@@ -185,7 +185,7 @@ class Trends
      *
      * @return float|string
      */
-    public static function INTERCEPT(array $yValues, array $xValues)
+    public static function INTERCEPT($yValues, $xValues)
     {
         try {
             self::checkTrendArrays($yValues, $xValues);
@@ -210,9 +210,9 @@ class Trends
      * @param mixed $const A logical (boolean) value specifying whether to force the intersect to equal 0 or not
      * @param mixed $stats A logical (boolean) value specifying whether to return additional regression statistics
      *
-     * @return array|string The result, or a string containing an error
+     * @return array|int|string The result, or a string containing an error
      */
-    public static function LINEST(array $yValues, $xValues = null, mixed $const = true, mixed $stats = false): string|array
+    public static function LINEST($yValues, $xValues = null, $const = true, $stats = false)
     {
         $const = ($const === null) ? true : (bool) Functions::flattenSingleValue($const);
         $stats = ($stats === null) ? false : (bool) Functions::flattenSingleValue($stats);
@@ -271,9 +271,9 @@ class Trends
      * @param mixed $const A logical (boolean) value specifying whether to force the intersect to equal 0 or not
      * @param mixed $stats A logical (boolean) value specifying whether to return additional regression statistics
      *
-     * @return array|string The result, or a string containing an error
+     * @return array|int|string The result, or a string containing an error
      */
-    public static function LOGEST(array $yValues, $xValues = null, mixed $const = true, mixed $stats = false): string|array
+    public static function LOGEST($yValues, $xValues = null, $const = true, $stats = false)
     {
         $const = ($const === null) ? true : (bool) Functions::flattenSingleValue($const);
         $stats = ($stats === null) ? false : (bool) Functions::flattenSingleValue($stats);
@@ -338,7 +338,7 @@ class Trends
      *
      * @return float|string The result, or a string containing an error
      */
-    public static function RSQ(array $yValues, array $xValues)
+    public static function RSQ($yValues, $xValues)
     {
         try {
             self::checkTrendArrays($yValues, $xValues);
@@ -362,7 +362,7 @@ class Trends
      *
      * @return float|string The result, or a string containing an error
      */
-    public static function SLOPE(array $yValues, array $xValues)
+    public static function SLOPE($yValues, $xValues)
     {
         try {
             self::checkTrendArrays($yValues, $xValues);
@@ -386,7 +386,7 @@ class Trends
      *
      * @return float|string
      */
-    public static function STEYX(array $yValues, array $xValues)
+    public static function STEYX($yValues, $xValues)
     {
         try {
             self::checkTrendArrays($yValues, $xValues);
@@ -412,7 +412,7 @@ class Trends
      *
      * @return float[]
      */
-    public static function TREND($yValues, $xValues = [], $newValues = [], mixed $const = true)
+    public static function TREND($yValues, $xValues = [], $newValues = [], $const = true)
     {
         $yValues = Functions::flattenArray($yValues);
         $xValues = Functions::flattenArray($xValues);

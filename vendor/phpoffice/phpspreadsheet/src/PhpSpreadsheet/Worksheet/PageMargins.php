@@ -70,7 +70,7 @@ class PageMargins
      *
      * @return $this
      */
-    public function setLeft($left): static
+    public function setLeft($left)
     {
         $this->left = $left;
 
@@ -94,7 +94,7 @@ class PageMargins
      *
      * @return $this
      */
-    public function setRight($right): static
+    public function setRight($right)
     {
         $this->right = $right;
 
@@ -118,7 +118,7 @@ class PageMargins
      *
      * @return $this
      */
-    public function setTop($top): static
+    public function setTop($top)
     {
         $this->top = $top;
 
@@ -142,7 +142,7 @@ class PageMargins
      *
      * @return $this
      */
-    public function setBottom($bottom): static
+    public function setBottom($bottom)
     {
         $this->bottom = $bottom;
 
@@ -166,7 +166,7 @@ class PageMargins
      *
      * @return $this
      */
-    public function setHeader($header): static
+    public function setHeader($header)
     {
         $this->header = $header;
 
@@ -190,11 +190,26 @@ class PageMargins
      *
      * @return $this
      */
-    public function setFooter($footer): static
+    public function setFooter($footer)
     {
         $this->footer = $footer;
 
         return $this;
+    }
+
+    /**
+     * Implement PHP __clone to create a deep clone, not just a shallow copy.
+     */
+    public function __clone()
+    {
+        $vars = get_object_vars($this);
+        foreach ($vars as $key => $value) {
+            if (is_object($value)) {
+                $this->$key = clone $value;
+            } else {
+                $this->$key = $value;
+            }
+        }
     }
 
     public static function fromCentimeters(float $value): float

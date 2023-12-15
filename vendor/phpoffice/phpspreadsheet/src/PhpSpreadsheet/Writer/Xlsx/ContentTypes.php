@@ -186,13 +186,6 @@ class ContentTypes extends WriterPart
                     }
                 }
             }
-
-            $bgImage = $spreadsheet->getSheet($i)->getBackgroundImage();
-            $mimeType = $spreadsheet->getSheet($i)->getBackgroundMime();
-            $extension = $spreadsheet->getSheet($i)->getBackgroundExtension();
-            if ($bgImage !== '' && !isset($aMediaContentTypes[$mimeType])) {
-                $this->writeDefaultContentType($objWriter, $extension, $mimeType);
-            }
         }
 
         // unparsed defaults
@@ -215,8 +208,6 @@ class ContentTypes extends WriterPart
         return $objWriter->getData();
     }
 
-    private static int $three = 3; // phpstan silliness
-
     /**
      * Get image mime type.
      *
@@ -224,12 +215,12 @@ class ContentTypes extends WriterPart
      *
      * @return string Mime Type
      */
-    private function getImageMimeType($filename): string
+    private function getImageMimeType($filename)
     {
         if (File::fileExists($filename)) {
             $image = getimagesize($filename);
 
-            return image_type_to_mime_type((is_array($image) && count($image) >= self::$three) ? $image[2] : 0);
+            return image_type_to_mime_type((is_array($image) && count($image) >= 3) ? $image[2] : 0);
         }
 
         throw new WriterException("File $filename does not exist");

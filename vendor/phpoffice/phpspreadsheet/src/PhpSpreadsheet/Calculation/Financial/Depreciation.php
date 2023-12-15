@@ -36,7 +36,7 @@ class Depreciation
      *
      * @return float|string
      */
-    public static function DB(mixed $cost, mixed $salvage, mixed $life, mixed $period, mixed $month = 12): string|float|int
+    public static function DB($cost, $salvage, $life, $period, $month = 12)
     {
         $cost = Functions::flattenSingleValue($cost);
         $salvage = Functions::flattenSingleValue($salvage);
@@ -102,7 +102,7 @@ class Depreciation
      *
      * @return float|string
      */
-    public static function DDB(mixed $cost, mixed $salvage, mixed $life, mixed $period, mixed $factor = 2.0)
+    public static function DDB($cost, $salvage, $life, $period, $factor = 2.0)
     {
         $cost = Functions::flattenSingleValue($cost);
         $salvage = Functions::flattenSingleValue($salvage);
@@ -150,7 +150,7 @@ class Depreciation
      *
      * @return float|string Result, or a string containing an error
      */
-    public static function SLN(mixed $cost, mixed $salvage, mixed $life): string|float
+    public static function SLN($cost, $salvage, $life)
     {
         $cost = Functions::flattenSingleValue($cost);
         $salvage = Functions::flattenSingleValue($salvage);
@@ -183,7 +183,7 @@ class Depreciation
      *
      * @return float|string Result, or a string containing an error
      */
-    public static function SYD(mixed $cost, mixed $salvage, mixed $life, mixed $period): string|float
+    public static function SYD($cost, $salvage, $life, $period)
     {
         $cost = Functions::flattenSingleValue($cost);
         $salvage = Functions::flattenSingleValue($salvage);
@@ -208,7 +208,8 @@ class Depreciation
         return $syd;
     }
 
-    private static function validateCost(mixed $cost, bool $negativeValueAllowed = false): float
+    /** @param mixed $cost */
+    private static function validateCost($cost, bool $negativeValueAllowed = false): float
     {
         $cost = FinancialValidations::validateFloat($cost);
         if ($cost < 0.0 && $negativeValueAllowed === false) {
@@ -218,7 +219,8 @@ class Depreciation
         return $cost;
     }
 
-    private static function validateSalvage(mixed $salvage, bool $negativeValueAllowed = false): float
+    /** @param mixed $salvage */
+    private static function validateSalvage($salvage, bool $negativeValueAllowed = false): float
     {
         $salvage = FinancialValidations::validateFloat($salvage);
         if ($salvage < 0.0 && $negativeValueAllowed === false) {
@@ -228,7 +230,8 @@ class Depreciation
         return $salvage;
     }
 
-    private static function validateLife(mixed $life, bool $negativeValueAllowed = false): float
+    /** @param mixed $life */
+    private static function validateLife($life, bool $negativeValueAllowed = false): float
     {
         $life = FinancialValidations::validateFloat($life);
         if ($life < 0.0 && $negativeValueAllowed === false) {
@@ -238,7 +241,8 @@ class Depreciation
         return $life;
     }
 
-    private static function validatePeriod(mixed $period, bool $negativeValueAllowed = false): float
+    /** @param mixed $period */
+    private static function validatePeriod($period, bool $negativeValueAllowed = false): float
     {
         $period = FinancialValidations::validateFloat($period);
         if ($period <= 0.0 && $negativeValueAllowed === false) {
@@ -248,7 +252,8 @@ class Depreciation
         return $period;
     }
 
-    private static function validateMonth(mixed $month): int
+    /** @param mixed $month */
+    private static function validateMonth($month): int
     {
         $month = FinancialValidations::validateInt($month);
         if ($month < 1) {
@@ -258,7 +263,8 @@ class Depreciation
         return $month;
     }
 
-    private static function validateFactor(mixed $factor): float
+    /** @param mixed $factor */
+    private static function validateFactor($factor): float
     {
         $factor = FinancialValidations::validateFloat($factor);
         if ($factor <= 0.0) {

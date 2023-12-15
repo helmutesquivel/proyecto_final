@@ -11,8 +11,10 @@ class Iterator implements \Iterator
 {
     /**
      * Spreadsheet to iterate.
+     *
+     * @var Spreadsheet
      */
-    private Spreadsheet $subject;
+    private $subject;
 
     /**
      * Current iterator position.

@@ -2,7 +2,7 @@
 
 use Controller\CaTelefonoController;
 
-//if(!empty($_SESSION['id'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
+if(!empty($_SESSION['idUsu'])){//VALIDACIÓN, OBLIGATORIO INICIO DE SESION
 
 $CaTelefono = new CaTelefonoController;
 
@@ -10,6 +10,7 @@ $listado = $CaTelefono->mostrar();
 
 ?>
 <h1>Compañia de Telefono</h1>
+
 
 <table class="table table-hove mt-3">
     <thead>
@@ -32,4 +33,4 @@ $listado = $CaTelefono->mostrar();
         <?php endforeach; ?>
     </tbody>
 </table>
-<?php //} ?>
+<?php } ?>

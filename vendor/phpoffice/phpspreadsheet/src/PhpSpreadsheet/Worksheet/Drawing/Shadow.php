@@ -19,42 +19,56 @@ class Shadow implements IComparable
 
     /**
      * Visible.
+     *
+     * @var bool
      */
-    private bool $visible;
+    private $visible;
 
     /**
      * Blur radius.
      *
      * Defaults to 6
+     *
+     * @var int
      */
-    private int $blurRadius;
+    private $blurRadius;
 
     /**
      * Shadow distance.
      *
      * Defaults to 2
+     *
+     * @var int
      */
-    private int $distance;
+    private $distance;
 
     /**
      * Shadow direction (in degrees).
+     *
+     * @var int
      */
-    private int $direction;
+    private $direction;
 
     /**
      * Shadow alignment.
+     *
+     * @var string
      */
-    private string $alignment;
+    private $alignment;
 
     /**
      * Color.
+     *
+     * @var Color
      */
-    private Color $color;
+    private $color;
 
     /**
      * Alpha.
+     *
+     * @var int
      */
-    private int $alpha;
+    private $alpha;
 
     /**
      * Create a new Shadow.
@@ -88,7 +102,7 @@ class Shadow implements IComparable
      *
      * @return $this
      */
-    public function setVisible($visible): static
+    public function setVisible($visible)
     {
         $this->visible = $visible;
 
@@ -112,7 +126,7 @@ class Shadow implements IComparable
      *
      * @return $this
      */
-    public function setBlurRadius($blurRadius): static
+    public function setBlurRadius($blurRadius)
     {
         $this->blurRadius = $blurRadius;
 
@@ -136,7 +150,7 @@ class Shadow implements IComparable
      *
      * @return $this
      */
-    public function setDistance($distance): static
+    public function setDistance($distance)
     {
         $this->distance = $distance;
 
@@ -160,7 +174,7 @@ class Shadow implements IComparable
      *
      * @return $this
      */
-    public function setDirection($direction): static
+    public function setDirection($direction)
     {
         $this->direction = $direction;
 
@@ -184,7 +198,7 @@ class Shadow implements IComparable
      *
      * @return $this
      */
-    public function setAlignment($alignment): static
+    public function setAlignment($alignment)
     {
         $this->alignment = $alignment;
 
@@ -206,7 +220,7 @@ class Shadow implements IComparable
      *
      * @return $this
      */
-    public function setColor(Color $color): static
+    public function setColor(Color $color)
     {
         $this->color = $color;
 
@@ -230,7 +244,7 @@ class Shadow implements IComparable
      *
      * @return $this
      */
-    public function setAlpha($alpha): static
+    public function setAlpha($alpha)
     {
         $this->alpha = $alpha;
 
@@ -242,17 +256,17 @@ class Shadow implements IComparable
      *
      * @return string Hash code
      */
-    public function getHashCode(): string
+    public function getHashCode()
     {
         return md5(
-            ($this->visible ? 't' : 'f')
-            . $this->blurRadius
-            . $this->distance
-            . $this->direction
-            . $this->alignment
-            . $this->color->getHashCode()
-            . $this->alpha
-            . __CLASS__
+            ($this->visible ? 't' : 'f') .
+            $this->blurRadius .
+            $this->distance .
+            $this->direction .
+            $this->alignment .
+            $this->color->getHashCode() .
+            $this->alpha .
+            __CLASS__
         );
     }
 
